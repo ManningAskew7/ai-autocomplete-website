@@ -384,16 +384,14 @@ export async function checkInjectionModePermissions(mode: InjectionMode): Promis
  * Get privacy policy URL
  */
 export function getPrivacyPolicyUrl(): string {
-  // TODO: Update with actual URL when hosted
-  return 'https://github.com/[your-repo]/blob/main/PRIVACY_POLICY.md';
+  return 'https://manningaskew7.github.io/ai-autocomplete-website/privacy.html';
 }
 
 /**
  * Get terms of service URL
  */
 export function getTermsOfServiceUrl(): string {
-  // TODO: Update with actual URL when hosted
-  return 'https://github.com/[your-repo]/blob/main/TERMS_OF_SERVICE.md';
+  return 'https://manningaskew7.github.io/ai-autocomplete-website/terms.html';
 }
 
 /**
