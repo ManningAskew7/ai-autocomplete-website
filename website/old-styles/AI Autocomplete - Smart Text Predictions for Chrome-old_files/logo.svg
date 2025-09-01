@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 50" width="200" height="50">
+  <!-- Define gradients for modern look -->
+  <defs>
+    <linearGradient id="arrowGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#ffffff;stop-opacity:0.3" />
+      <stop offset="50%" style="stop-color:#ffffff;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#ffffff;stop-opacity:0.3" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Main arrow line through the text -->
+  <line x1="5" y1="25" x2="195" y2="25" stroke="url(#arrowGradient)" stroke-width="2" opacity="0.5"/>
+  
+  <!-- Left arrow feathers -->
+  <g transform="translate(5, 25)">
+    <path d="M 0 0 L 8 -6 L 8 -3 L 3 0 L 8 3 L 8 6 Z" fill="#ffffff" opacity="0.8"/>
+    <path d="M 5 0 L 13 -6 L 13 -3 L 8 0 L 13 3 L 13 6 Z" fill="#ffffff" opacity="0.6"/>
+    <path d="M 10 0 L 18 -6 L 18 -3 L 13 0 L 18 3 L 18 6 Z" fill="#ffffff" opacity="0.4"/>
+  </g>
+  
+  <!-- AIAC Text with custom styling -->
+  <g font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif" 
+     font-weight="900" font-size="36" fill="#ffffff">
+    <!-- Letter A with cutout for arrow -->
+    <path d="M 45 40 L 50 20 L 55 20 L 63 40 L 58 40 L 57 35 L 48 35 L 47 40 Z M 49 31 L 56 31 L 52.5 22 Z" fill="#ffffff"/>
+    
+    <!-- Letter I -->
+    <rect x="70" y="20" width="6" height="20" fill="#ffffff"/>
+    
+    <!-- Letter A with cutout for arrow -->
+    <path d="M 85 40 L 90 20 L 95 20 L 103 40 L 98 40 L 97 35 L 88 35 L 87 40 Z M 89 31 L 96 31 L 92.5 22 Z" fill="#ffffff"/>
+    
+    <!-- Letter C -->
+    <path d="M 110 20 Q 125 20 125 30 Q 125 40 110 40 L 110 36 Q 120 36 120 30 Q 120 24 110 24 Z" fill="#ffffff"/>
+  </g>
+  
+  <!-- Right arrow head -->
+  <g transform="translate(195, 25)">
+    <path d="M 0 0 L -8 -6 L -8 -3 L -3 0 L -8 3 L -8 6 Z" fill="#ffffff"/>
+  </g>
+  
+  <!-- Subtle glow effect -->
+  <g opacity="0.3">
+    <line x1="5" y1="25" x2="195" y2="25" stroke="#ffffff" stroke-width="4" filter="blur(2px)"/>
+  </g>
+</svg>

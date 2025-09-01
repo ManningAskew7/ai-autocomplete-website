@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>AI Autocomplete - Selection Detection Test</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+      max-width: 800px;
+      margin: 50px auto;
+      padding: 20px;
+      line-height: 1.6;
+    }
+    h1 {
+      color: #333;
+      border-bottom: 2px solid #667eea;
+      padding-bottom: 10px;
+    }
+    h2 {
+      color: #555;
+      margin-top: 30px;
+    }
+    .test-section {
+      background: #f7f7f7;
+      border-radius: 8px;
+      padding: 20px;
+      margin: 20px 0;
+    }
+    .test-input {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 14px;
+    }
+    .instructions {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 15px;
+      border-radius: 8px;
+      margin: 20px 0;
+    }
+    .sample-text {
+      background: white;
+      padding: 15px;
+      border-left: 4px solid #667eea;
+      margin: 10px 0;
+      cursor: text;
+      user-select: text;
+    }
+    code {
+      background: #f0f0f0;
+      padding: 2px 5px;
+      border-radius: 3px;
+    }
+    .status {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      padding: 10px 20px;
+      background: #10b981;
+      color: white;
+      border-radius: 8px;
+      font-weight: 500;
+    }
+  </style>
+</head>
+<body>
+  <div class="status">Extension Status: Check Console</div>
+  
+  <h1>🚀 AI Autocomplete - Selection Detection Test</h1>
+  
+  <div class="instructions">
+    <h3>✨ How to Test Selection Detection:</h3>
+    <ol>
+      <li>Make sure the AI Autocomplete extension is loaded</li>
+      <li>Open Developer Console (F12) to see logs</li>
+      <li>Select any text on this page</li>
+      <li>Press <code>Ctrl+Space</code> to trigger AI completion</li>
+      <li>The extension should detect the selected text and generate completions</li>
+    </ol>
+  </div>
+
+  <!-- Test 1: Regular Input Fields -->
+  <div class="test-section">
+    <h2>Test 1: Standard Input Fields (Should Work Normally)</h2>
+    <input type="text" class="test-input" placeholder="Type here and press Ctrl+Space..." value="The weather today is">
+    <textarea class="test-input" rows="3" placeholder="Or type in this textarea...">I'm learning JavaScript and want to</textarea>
+  </div>
+
+  <!-- Test 2: Non-editable Text Selection -->
+  <div class="test-section">
+    <h2>Test 2: Non-editable Text (Selection Fallback)</h2>
+    <p>Select any part of this text and press Ctrl+Space:</p>
+    <div class="sample-text">
+      The quick brown fox jumps over the lazy dog. This is a sample paragraph that you can select to test the selection-based detection. When you select this text and press Ctrl+Space, the extension should detect it and provide AI completions that you can paste anywhere.
+    </div>
+    <div class="sample-text">
+      Once upon a time in a small village, there lived a young programmer who discovered the power of AI-assisted coding. Every day they would write code and
+    </div>
+  </div>
+
+  <!-- Test 3: Complex Elements -->
+  <div class="test-section">
+    <h2>Test 3: Mixed Content</h2>
+    <div contenteditable="true" class="test-input" style="min-height: 60px;">
+      This is a contenteditable div. You can edit this text directly or select any part and press Ctrl+Space.
+    </div>
+    <pre class="sample-text">
+function calculateSum(a, b) {
+  // TODO: implement the function to
+    </pre>
+  </div>
+
+  <!-- Test 4: Dynamic Content -->
+  <div class="test-section">
+    <h2>Test 4: Dynamic Content</h2>
+    <button onclick="addDynamicInput()">Add Dynamic Input</button>
+    <div id="dynamic-container"></div>
+  </div>
+
+  <!-- Test 5: Iframe -->
+  <div class="test-section">
+    <h2>Test 5: Iframe Content</h2>
+    <iframe srcdoc="
+      <html>
+        <body style='font-family: Arial; padding: 10px;'>
+          <h3>Iframe Content</h3>
+          <input type='text' placeholder='Input in iframe' value='Hello from iframe' style='width: 100%; padding: 5px;'>
+          <p>Select this text in the iframe and press Ctrl+Space to test iframe selection detection.</p>
+        </body>
+      </html>
+    " style="width: 100%; height: 150px; border: 1px solid #ddd; border-radius: 4px;"></iframe>
+  </div>
+
+  <!-- Test 6: Code Block Selection -->
+  <div class="test-section">
+    <h2>Test 6: Code Snippets (Selection for Completion)</h2>
+    <p>Select part of this code and press Ctrl+Space for AI completion:</p>
+    <pre class="sample-text" style="background: #1e1e1e; color: #d4d4d4; padding: 15px; overflow-x: auto;">
+<span style="color: #569cd6;">const</span> <span style="color: #9cdcfe;">fetchUserData</span> = <span style="color: #569cd6;">async</span> (<span style="color: #9cdcfe;">userId</span>) => {
+  <span style="color: #569cd6;">try</span> {
+    <span style="color: #569cd6;">const</span> <span style="color: #9cdcfe;">response</span> = <span style="color: #569cd6;">await</span> <span style="color: #dcdcaa;">fetch</span>(<span style="color: #ce9178;">`/api/users/</span><span style="color: #569cd6;">${</span><span style="color: #9cdcfe;">userId</span><span style="color: #569cd6;">}</span><span style="color: #ce9178;">`</span>);
+    <span style="color: #6a9955;">// TODO: Handle the response and</span>
+    </pre>
+  </div>
+
+  <script>
+    // Check if extension is loaded by looking for the data attribute
+    function checkExtensionStatus() {
+      const statusEl = document.querySelector('.status');
+      
+      // Check for the data attribute that the extension adds
+      if (document.body.getAttribute('data-ai-autocomplete-extension') === 'loaded') {
+        statusEl.textContent = '✅ Extension Loaded';
+        statusEl.style.background = '#10b981';
+        return; // Extension found, no need to keep checking
+      }
+      
+      // If not found yet, show waiting status and check again
+      statusEl.textContent = '⏳ Waiting for Extension...';
+      statusEl.style.background = '#f59e0b';
+      
+      // Keep checking for up to 5 seconds
+      if (!window.extensionCheckCount) window.extensionCheckCount = 0;
+      window.extensionCheckCount++;
+      
+      if (window.extensionCheckCount < 10) {
+        setTimeout(checkExtensionStatus, 500);
+      } else {
+        // After 5 seconds, assume it's not loaded
+        statusEl.textContent = '❌ Extension Not Detected';
+        statusEl.style.background = '#ef4444';
+      }
+    }
+    
+    // Start checking once DOM is ready
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', () => {
+        setTimeout(checkExtensionStatus, 100);
+      });
+    } else {
+      setTimeout(checkExtensionStatus, 100);
+    }
+
+    // Dynamic content function
+    function addDynamicInput() {
+      const container = document.getElementById('dynamic-container');
+      const input = document.createElement('textarea');
+      input.className = 'test-input';
+      input.placeholder = 'Dynamically added textarea...';
+      input.value = 'This textarea was added dynamically. Type here and';
+      input.rows = 2;
+      container.appendChild(input);
+      input.focus();
+    }
+
+    // Log selection changes
+    document.addEventListener('selectionchange', () => {
+      const selection = window.getSelection().toString();
+      if (selection && selection.length > 0) {
+        console.log('📝 Text selected:', selection.substring(0, 50) + '...');
+      }
+    });
+  </script>
+</body>
+</html>
