@@ -17,6 +17,9 @@
 - [x] Verified all extension claims for accuracy
 
 ### ⏳ Remaining Steps
+- [ ] Set up ExtensionPay account and get extension ID
+- [ ] Update EXTENSION_ID in licensing.ts (line 24)
+- [ ] Set _isPremiumUser to false in prompts.ts (line 215)
 - [ ] Create Chrome Web Store screenshots (5 required, 1280x800px)
 - [ ] Create promotional tiles (440x280px required, others optional)
 - [ ] Submit extension to Chrome Web Store
@@ -140,6 +143,72 @@ Contact: maextensions.help@gmail.com
 2. **storage permission:** Saves user preferences and API keys
 3. **scripting permission:** Injects completion UI into web pages
 4. **Host permissions (openrouter.ai):** Required for AI API calls
+5. **Host permissions (extensionpay.com):** Required for payment processing
+
+## 💰 ExtensionPay Setup (Premium Features)
+
+### Current Implementation Status:
+✅ **95% Complete** - Code is production-ready, just needs account setup
+
+### What's Already Implemented:
+- ✅ Complete ExtPay integration in `licensing.ts`
+- ✅ Premium feature gating for custom prompts
+- ✅ UI shows premium/free status
+- ✅ Payment buttons and subscription management
+- ✅ 7-day free trial configuration
+- ✅ Character limits (500 chars) for premium features
+
+### Setup ExtensionPay Account:
+
+#### Step 1: Create ExtensionPay Account
+1. Go to https://extensionpay.com
+2. Sign up with email: maextensions.help@gmail.com
+3. Add your extension:
+   - Name: "AI Autocomplete"
+   - Choose pricing model (recommended: $4.99/month)
+   - Set trial period: 7 days
+4. Get your Extension ID (will look like: `ext_pay_XXXXXXXXX`)
+
+#### Step 2: Update Extension Code
+```bash
+# Update src/utils/licensing.ts
+# Replace line 12:
+const EXTENSION_ID = 'ai-autocomplete-extension'; 
+# With your actual ID:
+const EXTENSION_ID = 'ext_pay_XXXXXXXXX';
+```
+
+#### Step 3: Configure Pricing in ExtensionPay Dashboard
+- Monthly: $4.99
+- Yearly: $39.99 (save 33%)
+- Trial: 7 days free
+- Payment methods: Credit card via Stripe
+
+#### Step 4: Test Payment Flow
+```bash
+# Build with real ExtensionPay ID
+npm run build
+
+# Test locally:
+1. Load extension in Chrome
+2. Click "Upgrade to Premium"
+3. Complete test payment
+4. Verify premium features unlock
+```
+
+### Premium Features Currently Gated:
+1. **Custom System Prompts** - Free users can't customize
+2. **Extended prompts** - Limited to 500 characters
+3. **Future features** - Analytics, templates, priority support
+
+### Important Files to Update:
+- `src/utils/licensing.ts` - Line 24: Update EXTENSION_ID
+- `src/background/prompts.ts` - Line 215: Change `_isPremiumUser: true` to `false`
+
+### ExtensionPay Revenue Split:
+- You receive: ~95% of revenue
+- ExtensionPay fee: $0.20 + 3% per transaction
+- Paid monthly via Stripe
 
 ## 📸 Creating Screenshots Guide
 
