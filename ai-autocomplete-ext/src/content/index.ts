@@ -1389,12 +1389,14 @@ function updateRewriteUI(index: number) {
     rewriteTitleElement.appendChild(textNode);
   }
   
-  // Update the preview text using our stored reference
+  // Update the preview text using our stored reference - show full text
   if (rewritePreviewElement) {
     logger.log('✅ Using stored preview element reference, updating text');
-    const text = rewrite.substring(0, 150) + (rewrite.length > 150 ? '...' : '');
-    rewritePreviewElement.textContent = text;
-    logger.log(`📋 Preview updated with: ${text.substring(0, 50)}...`);
+    rewritePreviewElement.textContent = rewrite;
+    logger.log(`📋 Preview updated with full text (${rewrite.length} chars): ${rewrite.substring(0, 50)}...`);
+    
+    // Scroll to top when switching between rewrites
+    rewritePreviewElement.scrollTop = 0;
   } else {
     logger.error('❌ No stored preview element reference!');
     // Try to find it as fallback
@@ -1402,8 +1404,8 @@ function updateRewriteUI(index: number) {
     if (preview) {
       logger.log('Found preview element as fallback');
       rewritePreviewElement = preview;
-      const text = rewrite.substring(0, 150) + (rewrite.length > 150 ? '...' : '');
-      preview.textContent = text;
+      preview.textContent = rewrite;
+      preview.scrollTop = 0;
     }
   }
 }
@@ -1432,7 +1434,7 @@ function showRewriteUI(rewrites: string[]) {
   // Debug log to see what we received
   logger.log('📝 Rewrites received in showRewriteUI:', rewrites);
   
-  // Show floating UI with rewrites (positioned top-right)
+  // Show floating UI with rewrites (positioned top-right) - responsive sizing
   const rewriteUI = document.createElement('div');
   rewriteUI.id = 'ai-autocomplete-rewrite-ui';
   rewriteUI.style.cssText = `
@@ -1447,8 +1449,11 @@ function showRewriteUI(rewrites: string[]) {
     font-size: 13px;
     z-index: 999999;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15), 0 0 0 1px rgba(0, 0, 0, 0.05);
-    max-width: 500px;
+    max-width: 600px;
     min-width: 350px;
+    max-height: 80vh;
+    display: flex;
+    flex-direction: column;
     animation: slideDown 0.2s ease-out;
   `;
   
@@ -1467,7 +1472,7 @@ function showRewriteUI(rewrites: string[]) {
   
   // Create UI content using DOM methods for better reliability
   const containerDiv = document.createElement('div');
-  containerDiv.style.cssText = 'display: flex; flex-direction: column; gap: 12px;';
+  containerDiv.style.cssText = 'display: flex; flex-direction: column; gap: 12px; overflow: hidden; flex: 1;';
   
   // Title with icon
   const titleDiv = document.createElement('div');
@@ -1483,23 +1488,50 @@ function showRewriteUI(rewrites: string[]) {
   // Store reference to title element for updates
   rewriteTitleElement = titleDiv;
   
-  // Preview box
+  // Preview box with dynamic sizing
   const previewDiv = document.createElement('div');
   previewDiv.id = 'ai-rewrite-preview';
   previewDiv.style.cssText = `
     background: #f5f5f5;
-    padding: 10px;
+    padding: 12px;
     border-radius: 4px;
     color: #000000;
-    font-weight: 500;
-    max-height: 120px;
+    font-weight: 400;
+    min-height: 40px;
+    max-height: 300px;
     overflow-y: auto;
-    line-height: 1.4;
+    line-height: 1.6;
+    font-size: 14px;
+    word-wrap: break-word;
+    white-space: pre-wrap;
+    scrollbar-width: thin;
+    scrollbar-color: #999 #f5f5f5;
   `;
-  // Set initial preview text
+  
+  // Add custom scrollbar styles for webkit browsers
+  const scrollbarStyle = document.createElement('style');
+  scrollbarStyle.textContent = `
+    #ai-rewrite-preview::-webkit-scrollbar {
+      width: 8px;
+    }
+    #ai-rewrite-preview::-webkit-scrollbar-track {
+      background: #f5f5f5;
+      border-radius: 4px;
+    }
+    #ai-rewrite-preview::-webkit-scrollbar-thumb {
+      background: #999;
+      border-radius: 4px;
+    }
+    #ai-rewrite-preview::-webkit-scrollbar-thumb:hover {
+      background: #777;
+    }
+  `;
+  document.head.appendChild(scrollbarStyle);
+  
+  // Set initial preview text - show full text, no truncation
   const initialText = rewrites[0];
-  previewDiv.textContent = initialText.substring(0, 150) + (initialText.length > 150 ? '...' : '');
-  logger.log(`📋 Initial preview text set to: ${initialText.substring(0, 50)}...`);
+  previewDiv.textContent = initialText;
+  logger.log(`📋 Initial preview text set (${initialText.length} chars): ${initialText.substring(0, 50)}...`);
   containerDiv.appendChild(previewDiv);
   
   // Store reference to preview element for updates
