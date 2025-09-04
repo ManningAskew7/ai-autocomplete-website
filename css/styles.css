@@ -443,6 +443,94 @@ section {
     line-height: 1.8;
 }
 
+/* AI Models Section */
+.ai-models {
+    background: var(--color-dark-section);
+    color: var(--color-primary-bg);
+    padding: var(--spacing-xxl) 0;
+}
+
+.ai-models .section-title {
+    color: var(--color-primary-bg);
+}
+
+.ai-models .section-subtitle {
+    color: #b0b0b0;
+}
+
+.models-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: var(--spacing-lg);
+    margin-bottom: var(--spacing-xl);
+}
+
+.model-card {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: var(--spacing-xl);
+    border-radius: var(--border-radius);
+    text-align: center;
+    transition: var(--transition);
+}
+
+.model-card:hover {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.3);
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.model-card.featured {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+.model-icon {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto var(--spacing-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--color-primary-bg);
+    border-radius: 12px;
+    position: relative;
+}
+
+.model-text-logo {
+    font-size: 1.5rem;
+    font-weight: 900;
+    color: var(--color-premium-black);
+    letter-spacing: -1px;
+}
+
+.model-card h3 {
+    color: var(--color-primary-bg);
+    margin-bottom: var(--spacing-sm);
+    font-size: 1.3rem;
+}
+
+.model-card p {
+    color: #b0b0b0;
+    line-height: 1.6;
+    font-size: 0.95rem;
+}
+
+.models-note {
+    text-align: center;
+    padding: var(--spacing-lg);
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: var(--border-radius);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.models-note p {
+    color: var(--color-primary-bg);
+    font-size: 1.1rem;
+    margin: 0;
+}
+
 /* How It Works */
 .steps {
     display: flex;
@@ -831,6 +919,14 @@ kbd {
     
     .shortcuts-grid {
         grid-template-columns: 1fr;
+    }
+    
+    .models-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .model-card {
+        padding: var(--spacing-lg);
     }
     
     .pricing-cards {
