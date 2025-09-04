@@ -780,6 +780,22 @@ kbd {
 }
 
 @media (max-width: 768px) {
+    .navbar .container {
+        justify-content: center;
+    }
+    
+    .nav-brand {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .logo {
+        transform: scale(3);
+        transform-origin: center center;
+        margin-left: 0;
+        margin-right: 0;
+    }
+    
     .nav-links {
         display: none;
     }
@@ -828,5 +844,13 @@ kbd {
     .footer-content {
         grid-template-columns: 1fr;
         text-align: center;
+    }
+    
+    .footer-logo {
+        transform: scale(3);
+        transform-origin: center center;
+        margin-left: auto;
+        margin-right: auto;
+        display: block;
     }
 }
