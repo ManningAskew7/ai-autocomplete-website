@@ -8,8 +8,14 @@
  */
 
 import { logger } from './logger';
+// PREMIUM_TOGGLE: Uncomment these imports when re-enabling premium features
+// import { 
+//   checkPremiumStatus as checkExtPayStatus,
+//   openPaymentPage as openExtPayPage,
+//   getSubscriptionDetails as getExtPayDetails,
+//   getExtPayForPopup
+// } from './licensing';
 import { 
-  checkPremiumStatus as checkExtPayStatus,
   openPaymentPage as openExtPayPage,
   getSubscriptionDetails as getExtPayDetails,
   getExtPayForPopup
@@ -27,19 +33,18 @@ export const CUSTOM_PROMPT_CHAR_LIMIT = 500;
  */
 export async function checkPremiumStatus(): Promise<boolean> {
   try {
-    // Use the ExtensionPay integration from licensing.ts
-    const isPremium = await checkExtPayStatus();
+    // PREMIUM_TOGGLE: Set this to false to re-enable premium restrictions
+    // Currently all features are free for initial launch
+    // To re-enable premium: Comment out the return true below and uncomment the ExtPay check
+    return true; // All users have premium features during free launch
     
-    // During development, you can override this for testing
-    // Remove this override for production
-    logger.log('Premium status check:', isPremium);
-    // Uncomment the next line to treat all users as premium during development
-    // return true;
-    
-    return isPremium;
+    // Original premium check (re-enable for freemium model):
+    // const isPremium = await checkExtPayStatus();
+    // logger.log('Premium status check:', isPremium);
+    // return isPremium;
   } catch (error) {
     logger.error('Error checking premium status:', error);
-    return false; // Default to free tier on error
+    return true; // Default to premium during free launch (change to false for freemium)
   }
 }
 
@@ -112,10 +117,13 @@ export async function getSubscriptionDetails(): Promise<{
  * @param isPremium - Whether the user has premium access
  * @returns Object with validation result and error message if any
  */
-export function validateCustomPrompt(prompt: string, isPremium: boolean): {
+export function validateCustomPrompt(prompt: string, _isPremium: boolean): {
   isValid: boolean;
   error?: string;
 } {
+  // PREMIUM_TOGGLE: Remove underscore from isPremium parameter when re-enabling
+  // Currently all users can use custom prompts during free launch
+  /*
   // Check if custom prompts are allowed for this user
   if (!isPremium && prompt.trim().length > 0) {
     return {
@@ -123,8 +131,9 @@ export function validateCustomPrompt(prompt: string, isPremium: boolean): {
       error: 'Custom prompts are a premium feature. Upgrade to unlock!'
     };
   }
+  */
   
-  // Check character limit
+  // Check character limit (applies to all users)
   if (prompt.length > CUSTOM_PROMPT_CHAR_LIMIT) {
     return {
       isValid: false,

@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react';
 import { popupLogger as logger } from '../utils/logger';
-import { getSubscriptionDetails, openPaymentPage } from '../utils/premium';
-import { getExtPayForPopup, openCustomerPortal } from '../utils/licensing';
+// PREMIUM_TOGGLE: Uncomment when re-enabling premium features
+// import { getSubscriptionDetails, openPaymentPage } from '../utils/premium';
+// PREMIUM_TOGGLE: Uncomment when re-enabling premium features
+// import { getExtPayForPopup, openCustomerPortal } from '../utils/licensing';
 import { storeApiKey, retrieveApiKey } from '../utils/security';
 import { 
   getInjectionMode, 
@@ -79,11 +81,13 @@ const Popup = () => {
   const [status, setStatus] = useState<{ type: 'success' | 'error' | 'warning' | 'info' | null; message: string }>({ type: null, message: '' });
   
   // Premium subscription state
-  const [subscription, setSubscription] = useState<{
+  // PREMIUM_TOGGLE: Change isPremium to false and planName to 'Free' to re-enable premium
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [_subscription, _setSubscription] = useState<{
     isPremium: boolean;
     planName: string;
     trialDaysRemaining?: number;
-  }>({ isPremium: false, planName: 'Free' });
+  }>({ isPremium: true, planName: 'All Features Unlocked' }); // Free launch - all features available
   
   // Injection mode state
   const [injectionMode, setInjectionModeState] = useState<InjectionMode>('conservative');
@@ -138,8 +142,8 @@ const Popup = () => {
     // Fetch models
     fetchModels();
     
-    // Load subscription status
-    loadSubscriptionStatus();
+    // PREMIUM_TOGGLE: Uncomment to re-enable subscription checking
+    // loadSubscriptionStatus();
     
     // Load injection mode
     loadInjectionMode();
@@ -186,6 +190,8 @@ const Popup = () => {
     setInjectionModeState(mode);
   };
   
+  // PREMIUM_TOGGLE: Uncomment when re-enabling premium features
+  /*
   const handleUpgradeClick = async () => {
     try {
       await openPaymentPage(true);
@@ -199,7 +205,10 @@ const Popup = () => {
       });
     }
   };
+  */
   
+  // PREMIUM_TOGGLE: Uncomment when re-enabling premium features
+  /*
   const loadSubscriptionStatus = async () => {
     try {
       const details = await getSubscriptionDetails();
@@ -212,6 +221,7 @@ const Popup = () => {
       logger.error('Failed to load subscription status:', error);
     }
   };
+  */
 
   const fetchModels = async () => {
     setLoading(true);
@@ -353,7 +363,7 @@ const Popup = () => {
         </h1>
         <div className="version">v0.2.0 - Dynamic Model Selection</div>
         
-        {/* Subscription Status */}
+        {/* PREMIUM_TOGGLE: Uncomment this section to re-enable subscription status UI
         <div className="subscription-status">
           <span className={`plan-badge ${subscription.isPremium ? 'premium' : 'free'}`}>
             {subscription.planName}
@@ -367,7 +377,6 @@ const Popup = () => {
               onClick={async () => {
                 try {
                   await openPaymentPage(true);
-                  // Reload subscription status after payment page closes
                   setTimeout(loadSubscriptionStatus, 2000);
                 } catch (error) {
                   logger.error('Failed to open payment page:', error);
@@ -394,6 +403,7 @@ const Popup = () => {
             </button>
           )}
         </div>
+        */}
         
         {selectedModelDetails && (
           <div className="current-model">
@@ -577,18 +587,21 @@ const Popup = () => {
         <div className="section">
           <div className="section-title">
             Custom System Prompt
+            {/* PREMIUM_TOGGLE: Uncomment to show premium label
             {!subscription.isPremium && (
               <span className="premium-label-black">PREMIUM</span>
             )}
+            */}
           </div>
           <div className="form-group custom-prompt-group">
-            <div className={!subscription.isPremium ? 'premium-feature' : ''}>
+            <div> {/* PREMIUM_TOGGLE: Add back className={!subscription.isPremium ? 'premium-feature' : ''} */}
               <textarea
                 id="customPrompt"
                 className="custom-prompt-textarea"
                 value={settings.customSystemPrompt}
                 onChange={(e) => {
-                  // Check premium status
+                  // PREMIUM_TOGGLE: Uncomment to re-enable premium check
+                  /*
                   if (!subscription.isPremium) {
                     setStatus({ 
                       type: 'warning', 
@@ -596,20 +609,19 @@ const Popup = () => {
                     });
                     return;
                   }
+                  */
                   // Enforce character limit
                   if (e.target.value.length <= 500) {
                     setSettings({ ...settings, customSystemPrompt: e.target.value });
                   }
                 }}
-                placeholder={subscription.isPremium 
-                  ? "e.g., 'Use formal, professional language' or 'Write in British English'..."
-                  : "Upgrade to Premium to use custom prompts"
-                }
+                placeholder="e.g., 'Use formal, professional language' or 'Write in British English'..."
                 maxLength={500}
                 rows={5}
-                disabled={!subscription.isPremium}
-                style={!subscription.isPremium ? { opacity: 0.6, cursor: 'not-allowed' } : {}}
+                // PREMIUM_TOGGLE: Add back disabled={!subscription.isPremium}
+                // style={!subscription.isPremium ? { opacity: 0.6, cursor: 'not-allowed' } : {}}
               />
+              {/* PREMIUM_TOGGLE: Uncomment to show lock overlay
               {!subscription.isPremium && (
                 <div className="premium-lock-overlay">
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#808080" strokeWidth="2">
@@ -618,6 +630,7 @@ const Popup = () => {
                   </svg>
                 </div>
               )}
+              */}
             </div>
             <div className="prompt-info">
               <div className="char-counter">
@@ -625,6 +638,10 @@ const Popup = () => {
                   {settings.customSystemPrompt.length}/500 characters
                 </span>
               </div>
+              <div className="help-text">
+                Custom prompts extend the default behavior and enhance completion style
+              </div>
+              {/* PREMIUM_TOGGLE: Uncomment to show conditional help text
               {subscription.isPremium ? (
                 <div className="help-text">
                   Custom prompts extend the default behavior and enhance completion style
@@ -634,10 +651,12 @@ const Popup = () => {
                   Upgrade to Premium to customize AI writing style and tone
                 </div>
               )}
+              */}
             </div>
           </div>
         </div>
         
+        {/* PREMIUM_TOGGLE: Uncomment to show upgrade button
         {!subscription.isPremium && (
           <div className="section premium-upgrade-section">
             <button
@@ -652,6 +671,7 @@ const Popup = () => {
             </div>
           </div>
         )}
+        */}
       </div>
 
       <div className={`tab-content ${activeTab === 'privacy' ? 'active' : ''}`}>

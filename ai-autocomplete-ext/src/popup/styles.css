@@ -863,7 +863,12 @@ body {
   cursor: not-allowed;
 }
 
-/* Subscription Status Styles */
+/* PREMIUM_TOGGLE: Uncomment these styles to re-enable premium UI
+   These styles are preserved for future freemium implementation
+   To re-enable: Remove the comment markers below */
+
+/* Subscription Status Styles - PREMIUM UI (Currently Hidden) */
+/*
 .subscription-status {
   margin: 8px 0 4px 0;
   display: flex;
@@ -929,8 +934,10 @@ body {
   background: #f0f0f0;
   border-color: #a0a0a0;
 }
+*/
 
-/* Premium Feature Indicators */
+/* Premium Feature Indicators - PREMIUM UI (Currently Hidden) */
+/*
 .premium-feature {
   position: relative;
 }
@@ -978,3 +985,4 @@ body {
   opacity: 0.4;
   pointer-events: none;
 }
+*/

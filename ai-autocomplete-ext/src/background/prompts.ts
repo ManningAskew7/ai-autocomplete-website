@@ -219,7 +219,8 @@ export function getSystemPrompt(
   
   // If user has provided a custom prompt, append it as User Style Preferences
   if (customPrompt && customPrompt.trim()) {
-    // TODO: When implementing freemium model, uncomment this check:
+    // PREMIUM_TOGGLE: To re-enable premium restrictions, uncomment the check below
+    // Currently all users can use custom prompts during free launch
     // if (!_isPremiumUser) {
     //   console.log('Custom prompts are a premium feature');
     //   return basePrompt;
