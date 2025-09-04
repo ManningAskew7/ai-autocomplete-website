@@ -18,6 +18,7 @@ import {
   getSystemPrompt, 
   MODE_TOKEN_LIMITS, 
   getNumberedListPrompt,
+  getRewriteSystemPrompt,
   type CompletionMode 
 } from './prompts';
 
@@ -1508,7 +1509,7 @@ chrome.runtime.onMessage.addListener((request, _sender, sendResponse) => {
       // Get encrypted API key first
       const apiKey = await retrieveApiKey();
       
-      chrome.storage.sync.get(['selectedModel', 'modelSettings'], async (result) => {
+      chrome.storage.sync.get(['selectedModel', 'modelSettings', 'customSystemPrompt'], async (result) => {
         logger.log('=============== REWRITE REQUEST ===============');
         logger.log('Retrieved settings from storage');
         logger.log('🚀 ACTIVE MODEL:', result.selectedModel || 'google/gemini-2.5-flash-lite');
@@ -1548,11 +1549,9 @@ chrome.runtime.onMessage.addListener((request, _sender, sendResponse) => {
         try {
           logger.log('🌐 Calling OpenRouter API for rewrite...');
           
-          // Use numbered format for better reliability
-          const rewritePrompt = `Rewrite the given text in 3 different ways to improve grammar, clarity, and flow. 
-Output each version on a new line, numbered 1-3. 
-Keep similar length and meaning as the original.
-Fix any grammar or spelling errors.`;
+          // Get the rewrite prompt with optional custom system prompt
+          const rewritePrompt = getRewriteSystemPrompt(result.customSystemPrompt);
+          logger.log('📝 Using rewrite prompt with custom preferences:', !!result.customSystemPrompt);
           
           const messages = [
             { 

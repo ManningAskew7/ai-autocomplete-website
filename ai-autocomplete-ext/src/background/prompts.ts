@@ -227,7 +227,7 @@ export function getSystemPrompt(
     // }
     
     // Construct the enhanced prompt with user preferences
-    const userStyleSection = `USER STYLE PREFERENCES:
+    const userStyleSection = `# User Style Preferences:
 ${customPrompt.trim()}
 
 IMPORTANT: Apply the above style preferences while following the core instructions below.
@@ -314,3 +314,35 @@ CRITICAL INSTRUCTIONS:
 7. Return ONLY a valid JSON array with no additional text
 
 FORMAT: ["improved version 1", "improved version 2", "improved version 3"]`;
+
+/**
+ * Get the rewrite system prompt with optional custom user style preferences
+ * 
+ * @param customPrompt - Optional custom prompt from user settings  
+ * @returns The combined system prompt for rewriting text
+ */
+export function getRewriteSystemPrompt(customPrompt?: string): string {
+  // Base rewrite prompt - using numbered format for better reliability
+  const baseRewritePrompt = `Rewrite the given text in 3 different ways to improve grammar, clarity, and flow. 
+Output each version on a new line, numbered 1-3. 
+Keep similar length and meaning as the original.
+Fix any grammar or spelling errors.`;
+  
+  // If user has provided a custom prompt, prepend it with the header
+  if (customPrompt && customPrompt.trim()) {
+    const userStyleSection = `# User Style Preferences:
+${customPrompt.trim()}
+
+IMPORTANT: Apply the above style preferences while following the core instructions below.
+
+---
+
+`;
+    
+    // Prepend user preferences to the base rewrite prompt
+    return userStyleSection + baseRewritePrompt;
+  }
+  
+  // No custom prompt - use base rewrite prompt
+  return baseRewritePrompt;
+}
