@@ -36,6 +36,7 @@ interface Keybinds {
   dismiss: string;
   rewrite: string;
   manualInject: string;
+  completionMode: string;
 }
 
 type CompletionMode = 'short' | 'medium' | 'long';
@@ -70,7 +71,8 @@ const Popup = () => {
       cycle: 'tab',
       dismiss: 'escape',
       rewrite: 'alt+shift+r',
-      manualInject: 'ctrl+shift+space'
+      manualInject: 'ctrl+shift+space',
+      completionMode: 'shift+alt+m'
     },
     completionMode: 'short'
   });
@@ -133,7 +135,8 @@ const Popup = () => {
             cycle: 'tab',
             dismiss: 'escape',
             rewrite: 'alt+shift+r',
-            manualInject: 'ctrl+shift+space'
+            manualInject: 'ctrl+shift+space',
+            completionMode: 'shift+alt+m'
           },
           completionMode: result.completionMode || 'short'
         });
@@ -1164,6 +1167,25 @@ const Popup = () => {
             <div className="help-text">Key to manually inject the script into the current page (useful in Conservative mode)</div>
           </div>
 
+          <div className="form-group">
+            <label>Switch Completion Mode</label>
+            <select
+              value={settings.keybinds.completionMode}
+              onChange={(e) => setSettings({
+                ...settings,
+                keybinds: { ...settings.keybinds, completionMode: e.target.value }
+              })}
+              style={{ width: '100%', padding: '8px', borderRadius: '4px', border: '1px solid #ddd' }}
+            >
+              <option value="shift+alt+m">Shift + Alt + M (Default)</option>
+              <option value="ctrl+shift+m">Ctrl + Shift + M</option>
+              <option value="ctrl+alt+m">Ctrl + Alt + M</option>
+              <option value="alt+m">Alt + M</option>
+              <option value="ctrl+m">Ctrl + M</option>
+            </select>
+            <div className="help-text">Cycle through Short, Medium, and Long completion modes on the fly</div>
+          </div>
+
           <button
             onClick={() => {
               const defaultKeybinds = {
@@ -1172,7 +1194,8 @@ const Popup = () => {
                 cycle: 'tab',
                 dismiss: 'escape',
                 rewrite: 'alt+shift+r',
-                manualInject: 'ctrl+shift+space'
+                manualInject: 'ctrl+shift+space',
+                completionMode: 'shift+alt+m'
               };
               setSettings({ ...settings, keybinds: defaultKeybinds });
             }}
@@ -1213,6 +1236,57 @@ const Popup = () => {
           <span>{status.message}</span>
         </div>
       )}
+      
+      <div style={{
+        marginTop: '20px',
+        paddingTop: '16px',
+        borderTop: '1px solid #e5e7eb',
+        textAlign: 'center'
+      }}>
+        <div style={{
+          display: 'flex',
+          justifyContent: 'center',
+          gap: '16px',
+          fontSize: '13px'
+        }}>
+          <a 
+            href="https://manningaskew7.github.io/ai-autocomplete-website/tutorial.html"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{
+              color: '#1890ff',
+              textDecoration: 'none',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '4px'
+            }}
+          >
+            📚 Tutorial
+          </a>
+          <a 
+            href="https://manningaskew7.github.io/ai-autocomplete-website/"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{
+              color: '#1890ff',
+              textDecoration: 'none'
+            }}
+          >
+            🌐 Website
+          </a>
+          <a 
+            href="https://github.com/ManningAskew7/ai-autocomplete-website/issues"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{
+              color: '#1890ff',
+              textDecoration: 'none'
+            }}
+          >
+            🐛 Report Issue
+          </a>
+        </div>
+      </div>
     </div>
   );
 };

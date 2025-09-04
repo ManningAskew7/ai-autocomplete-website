@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="AI Autocomplete Tutorial - Learn how to use AI-powered text completion in your browser">
+    <title>AI Autocomplete Tutorial - How to Use</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/tutorial.css">
+    <link rel="icon" type="image/svg+xml" href="assets/logo.svg">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <a href="index.html">
+                    <img src="assets/logo-black.svg" alt="AIAC Logo" class="logo">
+                </a>
+            </div>
+            <div class="nav-links">
+                <a href="index.html">Home</a>
+                <a href="index.html#features">Features</a>
+                <a href="tutorial.html" class="active">Tutorial</a>
+                <a href="privacy.html">Privacy</a>
+                <a href="terms.html">Terms</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Tutorial Hero -->
+    <section class="tutorial-hero">
+        <div class="container">
+            <h1>AI Autocomplete Tutorial</h1>
+            <p>Master AI-powered text completion in minutes</p>
+        </div>
+    </section>
+
+    <!-- Getting Started -->
+    <section class="tutorial-section">
+        <div class="container">
+            <h2>🚀 Getting Started</h2>
+            <div class="tutorial-card">
+                <h3>Step 1: Install the Extension</h3>
+                <p>Add AI Autocomplete to Chrome from the Web Store and complete the privacy consent screen.</p>
+            </div>
+            <div class="tutorial-card">
+                <h3>Step 2: Add Your API Key</h3>
+                <p>Get your OpenRouter API key from <a href="https://openrouter.ai/keys" target="_blank">openrouter.ai/keys</a> and enter it in the extension popup.</p>
+            </div>
+            <div class="tutorial-card">
+                <h3>Step 3: Choose Your Settings</h3>
+                <p>Select your preferred AI model, injection mode, and customize keybinds to your liking.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Injection Modes -->
+    <section class="tutorial-section dark">
+        <div class="container">
+            <h2>🔒 Understanding Injection Modes</h2>
+            <p class="section-intro">Choose how AI Autocomplete integrates with websites based on your privacy preferences</p>
+            
+            <div class="modes-grid">
+                <div class="mode-card">
+                    <h3>Conservative Mode</h3>
+                    <span class="mode-badge safe">Most Private</span>
+                    <ul>
+                        <li>Minimal browser access</li>
+                        <li>May require opening popup before using</li>
+                        <li>Manual injection with <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>Space</kbd></li>
+                        <li>Best for privacy-conscious users</li>
+                    </ul>
+                    <p class="mode-tip">💡 Use manual injection keybind to activate on any page</p>
+                </div>
+                
+                <div class="mode-card recommended">
+                    <h3>Balanced Mode</h3>
+                    <span class="mode-badge">Recommended</span>
+                    <ul>
+                        <li>Works on most websites automatically</li>
+                        <li>Respects website preferences</li>
+                        <li>Good privacy protection</li>
+                        <li>Best for most users</li>
+                    </ul>
+                    <p class="mode-tip">💡 The sweet spot between functionality and privacy</p>
+                </div>
+                
+                <div class="mode-card">
+                    <h3>Aggressive Mode</h3>
+                    <span class="mode-badge caution">Maximum Compatibility</span>
+                    <ul>
+                        <li>Works on 95%+ of websites</li>
+                        <li>May override website preferences</li>
+                        <li>Includes canvas-based editors</li>
+                        <li>For users who prioritize functionality</li>
+                    </ul>
+                    <p class="mode-tip">💡 Enable Enhanced Detection for Google Docs support</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Core Features -->
+    <section class="tutorial-section">
+        <div class="container">
+            <h2>✨ Core Features</h2>
+            
+            <!-- Autocomplete -->
+            <div class="feature-tutorial">
+                <h3>Text Autocomplete</h3>
+                <div class="keybind-display">
+                    <kbd>Ctrl</kbd> + <kbd>Space</kbd>
+                    <span class="keybind-label">Trigger Autocomplete</span>
+                </div>
+                <div class="steps-list">
+                    <div class="step">1. Place your cursor where you want to write</div>
+                    <div class="step">2. Press <kbd>Ctrl</kbd>+<kbd>Space</kbd> to trigger AI suggestions</div>
+                    <div class="step">3. Wait for the AI to generate 5 unique completions</div>
+                    <div class="step">4. Press <kbd>Tab</kbd> to cycle through suggestions</div>
+                    <div class="step">5. Press <kbd>→</kbd> to accept or <kbd>Esc</kbd> to dismiss</div>
+                </div>
+            </div>
+
+            <!-- Completion Modes -->
+            <div class="feature-tutorial">
+                <h3>Completion Modes</h3>
+                <div class="keybind-display">
+                    <kbd>Shift</kbd> + <kbd>Alt</kbd> + <kbd>M</kbd>
+                    <span class="keybind-label">Switch Completion Mode</span>
+                </div>
+                <div class="completion-modes">
+                    <div class="mode">
+                        <strong>Short Mode:</strong> 5-20 words for quick completions
+                    </div>
+                    <div class="mode">
+                        <strong>Medium Mode:</strong> 20-40 words for standard paragraphs
+                    </div>
+                    <div class="mode">
+                        <strong>Long Mode:</strong> 50-100 words for detailed content
+                    </div>
+                </div>
+                <p class="feature-tip">Press the keybind anytime to cycle through modes. Your current mode appears briefly when changed.</p>
+            </div>
+
+            <!-- Text Rewrite -->
+            <div class="feature-tutorial">
+                <h3>AI Text Rewriting</h3>
+                <div class="keybind-display">
+                    <kbd>Alt</kbd> + <kbd>Shift</kbd> + <kbd>R</kbd>
+                    <span class="keybind-label">Rewrite Selected Text</span>
+                </div>
+                <div class="steps-list">
+                    <div class="step">1. Select any text you want to improve</div>
+                    <div class="step">2. Press <kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>R</kbd></div>
+                    <div class="step">3. AI generates 5 different rewrites</div>
+                    <div class="step">4. Click a number or use arrow keys to preview</div>
+                    <div class="step">5. Press Enter to apply or Esc to cancel</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Keyboard Shortcuts -->
+    <section class="tutorial-section dark">
+        <div class="container">
+            <h2>⌨️ Complete Keyboard Reference</h2>
+            
+            <div class="shortcuts-table">
+                <h3>Essential Shortcuts</h3>
+                <table>
+                    <tr>
+                        <th>Action</th>
+                        <th>Default Keybind</th>
+                        <th>Description</th>
+                    </tr>
+                    <tr>
+                        <td>Trigger Autocomplete</td>
+                        <td><kbd>Ctrl</kbd> + <kbd>Space</kbd></td>
+                        <td>Generate AI text completions at cursor</td>
+                    </tr>
+                    <tr>
+                        <td>Accept Suggestion</td>
+                        <td><kbd>→</kbd> Arrow Right</td>
+                        <td>Insert the current suggestion</td>
+                    </tr>
+                    <tr>
+                        <td>Cycle Suggestions</td>
+                        <td><kbd>Tab</kbd></td>
+                        <td>Browse through 5 AI suggestions</td>
+                    </tr>
+                    <tr>
+                        <td>Dismiss Suggestions</td>
+                        <td><kbd>Esc</kbd></td>
+                        <td>Cancel and hide all suggestions</td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="shortcuts-table">
+                <h3>Advanced Features</h3>
+                <table>
+                    <tr>
+                        <th>Action</th>
+                        <th>Default Keybind</th>
+                        <th>Description</th>
+                    </tr>
+                    <tr>
+                        <td>Rewrite Selected Text</td>
+                        <td><kbd>Alt</kbd> + <kbd>Shift</kbd> + <kbd>R</kbd></td>
+                        <td>Improve and rewrite selected text</td>
+                    </tr>
+                    <tr>
+                        <td>Switch Completion Mode</td>
+                        <td><kbd>Shift</kbd> + <kbd>Alt</kbd> + <kbd>M</kbd></td>
+                        <td>Cycle: Short → Medium → Long</td>
+                    </tr>
+                    <tr>
+                        <td>Manual Injection</td>
+                        <td><kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>Space</kbd></td>
+                        <td>Force activate on current page</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pro Tips -->
+    <section class="tutorial-section">
+        <div class="container">
+            <h2>💡 Pro Tips</h2>
+            
+            <div class="tips-grid">
+                <div class="tip-card">
+                    <h3>🎯 Context Matters</h3>
+                    <p>Write a few words before triggering autocomplete. The AI uses surrounding text for better suggestions.</p>
+                </div>
+                
+                <div class="tip-card">
+                    <h3>🔧 Custom System Prompts</h3>
+                    <p>Personalize AI responses with custom prompts in Advanced settings. Define your writing style and tone.</p>
+                </div>
+                
+                <div class="tip-card">
+                    <h3>⚡ Model Selection</h3>
+                    <p>Use Gemini 2.5 Flash for speed, GPT-5 for quality, or Claude 4 for nuanced writing.</p>
+                </div>
+                
+                <div class="tip-card">
+                    <h3>📝 Email Writing</h3>
+                    <p>Start emails with "Dear [Name]," then trigger autocomplete for professional email bodies.</p>
+                </div>
+                
+                <div class="tip-card">
+                    <h3>💬 Social Media</h3>
+                    <p>Use Short mode for tweets, Medium for LinkedIn posts, and Long for blog comments.</p>
+                </div>
+                
+                <div class="tip-card">
+                    <h3>🔐 Privacy First</h3>
+                    <p>Text is only sent to AI when YOU trigger it. No automatic monitoring or data collection.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Troubleshooting -->
+    <section class="tutorial-section dark">
+        <div class="container">
+            <h2>🔧 Troubleshooting</h2>
+            
+            <div class="troubleshoot-grid">
+                <div class="troubleshoot-card">
+                    <h3>Extension not working?</h3>
+                    <ul>
+                        <li>Check if you've accepted the privacy consent</li>
+                        <li>Verify your API key has credits</li>
+                        <li>Try switching injection modes</li>
+                        <li>Use manual injection: <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>Space</kbd></li>
+                    </ul>
+                </div>
+                
+                <div class="troubleshoot-card">
+                    <h3>No suggestions appearing?</h3>
+                    <ul>
+                        <li>Ensure you have an active internet connection</li>
+                        <li>Check OpenRouter API status</li>
+                        <li>Try a different AI model</li>
+                        <li>Enable Enhanced Detection in Privacy tab</li>
+                    </ul>
+                </div>
+                
+                <div class="troubleshoot-card">
+                    <h3>Google Docs not working?</h3>
+                    <ul>
+                        <li>Switch to Aggressive injection mode</li>
+                        <li>Enable Enhanced Detection</li>
+                        <li>Refresh the Google Docs page</li>
+                        <li>Open extension popup once before using</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta">
+        <div class="container">
+            <h2>Ready to Write Faster?</h2>
+            <p>Start using AI Autocomplete and transform your writing experience</p>
+            <a href="https://chrome.google.com/webstore" class="btn btn-primary btn-large">
+                Install Extension
+            </a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <img src="assets/logo-white.svg" alt="AIAC Logo" class="footer-logo">
+                    <p>AI-powered text completion for the modern web</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Product</h4>
+                    <ul>
+                        <li><a href="index.html#features">Features</a></li>
+                        <li><a href="index.html#how-it-works">How It Works</a></li>
+                        <li><a href="tutorial.html">Tutorial</a></li>
+                        <li><a href="https://github.com">GitHub</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Legal</h4>
+                    <ul>
+                        <li><a href="privacy.html">Privacy Policy</a></li>
+                        <li><a href="terms.html">Terms of Service</a></li>
+                        <li><a href="privacy.html#gdpr">GDPR Compliance</a></li>
+                        <li><a href="privacy.html#ccpa">CCPA Compliance</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Support</h4>
+                    <ul>
+                        <li><a href="https://github.com/ManningAskew7/ai-autocomplete-website/issues">Report Issue</a></li>
+                        <li><a href="mailto:maextensions.help@gmail.com">Contact</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 AI Autocomplete. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+</body>
+</html>
