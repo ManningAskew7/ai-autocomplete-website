@@ -35,6 +35,7 @@ interface Keybinds {
   cycle: string;
   dismiss: string;
   rewrite: string;
+  manualInject: string;
 }
 
 type CompletionMode = 'short' | 'medium' | 'long';
@@ -68,7 +69,8 @@ const Popup = () => {
       accept: 'arrowright',
       cycle: 'tab',
       dismiss: 'escape',
-      rewrite: 'alt+shift+r'
+      rewrite: 'alt+shift+r',
+      manualInject: 'ctrl+shift+space'
     },
     completionMode: 'short'
   });
@@ -130,7 +132,8 @@ const Popup = () => {
             accept: 'arrowright',
             cycle: 'tab',
             dismiss: 'escape',
-            rewrite: 'alt+shift+r'
+            rewrite: 'alt+shift+r',
+            manualInject: 'ctrl+shift+space'
           },
           completionMode: result.completionMode || 'short'
         });
@@ -1142,6 +1145,24 @@ const Popup = () => {
             <div className="help-text">Key to rewrite and improve selected text</div>
           </div>
 
+          <div className="form-group">
+            <label>Manual Inject Script</label>
+            <select
+              value={settings.keybinds.manualInject}
+              onChange={(e) => setSettings({
+                ...settings,
+                keybinds: { ...settings.keybinds, manualInject: e.target.value }
+              })}
+              style={{ width: '100%', padding: '8px', borderRadius: '4px', border: '1px solid #ddd' }}
+            >
+              <option value="ctrl+shift+space">Ctrl + Shift + Space (Default)</option>
+              <option value="ctrl+shift+i">Ctrl + Shift + I</option>
+              <option value="ctrl+shift+j">Ctrl + Shift + J</option>
+              <option value="alt+shift+space">Alt + Shift + Space</option>
+              <option value="ctrl+alt+space">Ctrl + Alt + Space</option>
+            </select>
+            <div className="help-text">Key to manually inject the script into the current page (useful in Conservative mode)</div>
+          </div>
 
           <button
             onClick={() => {
@@ -1150,7 +1171,8 @@ const Popup = () => {
                 accept: 'arrowright',
                 cycle: 'tab',
                 dismiss: 'escape',
-                rewrite: 'alt+shift+r'
+                rewrite: 'alt+shift+r',
+                manualInject: 'ctrl+shift+space'
               };
               setSettings({ ...settings, keybinds: defaultKeybinds });
             }}

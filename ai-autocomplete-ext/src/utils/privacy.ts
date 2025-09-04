@@ -62,6 +62,7 @@ export const INJECTION_MODE_INFO = {
     details: [
       'Minimal browser access',
       'May require opening popup before using Ctrl+Space',
+      'Can manually inject with Ctrl+Shift+Space anytime',
       'Best for privacy-conscious users'
     ],
     permissions: [] as string[],
