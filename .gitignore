@@ -13,14 +13,16 @@ build/
 .env.*.local
 *.env
 
+# System files
+.DS_Store
+Thumbs.db
+
 # IDE files
 .vscode/
 .idea/
 *.swp
 *.swo
 *~
-.DS_Store
-Thumbs.db
 
 # Logs
 *.log
@@ -40,6 +42,9 @@ nul
 # Chrome extension package files
 *.crx
 *.pem
+
+# Old files
+old-styles/
 
 # Optional - keep these if you want
 # *.jpg
