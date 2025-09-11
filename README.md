@@ -1,13 +1,13 @@
 # AI Autocomplete Website & Extension Project
 
-Official website for the AI Autocomplete Chrome Extension (v0.3.0) - providing intelligent text predictions and AI chat powered by 300+ AI models.
+Official website for the AI Autocomplete Chrome Extension (v0.2.0) - providing intelligent text predictions and AI chat powered by 300+ AI models.
 
 🌐 **Live Site:** [https://manningaskew7.github.io/ai-autocomplete-website/](https://manningaskew7.github.io/ai-autocomplete-website/)
 🎓 **Tutorial:** [https://manningaskew7.github.io/ai-autocomplete-website/tutorial.html](https://manningaskew7.github.io/ai-autocomplete-website/tutorial.html)
 
 ## 📋 Overview
 
-This is the public-facing website for AI Autocomplete, a Chrome extension that brings AI-powered text completion and chat to any webpage. The extension is currently in **Free Launch Phase (v0.3.0)** with all premium features unlocked.
+This is the public-facing website for AI Autocomplete, a Chrome extension that brings AI-powered text completion and chat to any webpage. The extension is currently in **Free Launch Phase (v0.2.0)** with all premium features unlocked.
 
 ### Website Features:
 - **Landing Page** - Product features, 300+ AI models showcase, and pricing
@@ -16,21 +16,40 @@ This is the public-facing website for AI Autocomplete, a Chrome extension that b
 - **Terms of Service** - Legal terms and usage guidelines
 - **Professional Design** - Minimalist black/grey/white theme matching the extension UI
 
-### 🆕 New in v0.3.0: AI Chat Feature
+### 🆕 New in v0.2.0: AI Chat Feature
 - **Full AI Chat Interface** - Press Alt+Shift+C to open a dedicated chat window
 - **300+ AI Models** - Chat with GPT-5, Claude 4, Gemini 2.5 Pro, DeepSeek V3.1, and more
+- **Hybrid Chat Mode** - Toggle between Global (🌐) and Domain-specific (📍) conversations
+- **Conversation Memory** - Full conversation history with context preservation across sessions
+- **Customizable Chat UI** - Draggable, resizable interface with custom backgrounds and opacity
+- **Smart Token Management** - Uses full token limits (up to 62,000 tokens) for reasoning models
 - **Dark Theme UI** - Matches extension design with smooth animations and responsive layout
-- **Smart Token Management** - Uses full token limits (up to 62,000), shows current settings
-- **Optional System Prompts** - Chat works without system prompts for more natural responses
-- **Phase 1 Implementation** - No conversation memory yet, each message is independent
-- **Instant Access** - Available on any webpage where the extension is active
+- **Persistent Storage** - Conversations saved locally with per-domain or global storage modes
 
-### Extension Features (v0.3.0):
+#### Hybrid Chat Mode Details:
+- **🌐 Global Mode** - One continuous conversation that follows you across all websites
+- **📍 Domain Mode** - Separate conversations for each website/domain you visit
+- **One-Click Toggle** - Switch between modes instantly with visual indicators
+- **Context Preservation** - Each mode maintains its own conversation history
+- **Smart Notifications** - Visual feedback when switching modes with welcome messages
+
+#### Chat UI Customization Features:
+- **Draggable Interface** - Click and drag the chat header to position anywhere on screen
+- **Resizable Window** - Drag the bottom-right corner to resize (300x400px minimum, 800x800px maximum)
+- **Custom Backgrounds** - Upload personal images as chat window backgrounds via settings panel
+- **Opacity Control** - Adjust transparency from 50% to 100% with a smooth slider
+- **Settings Panel** - Hidden behind the settings button (⚙️) to maintain clean UI design
+- **Position & Size Reset** - Reset buttons to return to default position and dimensions
+- **Persistent Preferences** - All customization settings saved and restored between sessions
+
+### Extension Features (v0.2.0):
 - **AI Text Completion** - Access 300+ models (GPT-5, Claude 4, Gemini 2.5, DeepSeek V3.1, etc.)
-- **AI Chat Interface** - Full conversational AI accessible via Alt+Shift+C with dark theme UI
+- **AI Chat Interface** - Full conversational AI with persistent memory and hybrid mode switching
+- **Hybrid Chat Mode** - Global conversations that follow you everywhere or domain-specific chats
+- **Chat UI Customization** - Draggable, resizable interface with background images and opacity control
 - **Text Rewriting** - AI-powered text improvement and rewrites
 - **Completion Modes** - Short (5-20 words), Medium (20-40 words), Long (50-100 words)
-- **8 Customizable Keybinds** - Including completion mode switcher and chat opener
+- **8 Customizable Keybinds** - Including completion mode switcher and chat opener (Alt+Shift+C)
 - **Extended Token Limits** - Up to 62,000 tokens for chat and high-token completion modes
 - **3 Injection Modes** - Conservative, Balanced, and Aggressive for different privacy needs
 - **Enhanced Detection** - Improved support for Google Docs and canvas-based editors
@@ -201,7 +220,7 @@ ai-autocomplete-website/
 ### Extension Source Code:
 ```
 ai-autocomplete-ext/
-├── manifest.json           # Extension manifest (v0.3.0)
+├── manifest.json           # Extension manifest (v0.2.0)
 ├── src/
 │   ├── popup/             # Extension popup interface
 │   ├── content/           # Content scripts for web pages
@@ -247,7 +266,7 @@ ai-autocomplete-ext/
    ```
 5. **GitHub Pages auto-updates** in 1-2 minutes
 
-### Technical Improvements in v0.3.0:
+### Technical Improvements in v0.2.0:
 
 1. **Enhanced AI Model Support**:
    - **GPT-5 Compatibility** - Fixed support with proper high token limit handling
@@ -258,15 +277,32 @@ ai-autocomplete-ext/
 2. **Chat Implementation**:
    - **Dedicated Chat UI Manager** - New `chat-ui-manager.ts` with full UI state management
    - **Background Script Integration** - Enhanced `GET_CHAT_RESPONSE` message handling
+   - **Hybrid Mode System** - Global vs domain-specific conversation storage
+   - **Conversation Memory** - Persistent chat history with context management
+   - **UI Customization Engine** - Draggable, resizable interface with settings panel
    - **Keybind Integration** - Alt+Shift+C keybind with conflict prevention
-   - **Settings Display** - Shows current max tokens and custom prompt status
+   - **Settings Display** - Shows current max tokens, mode, and custom prompt status
 
-3. **Improved Keybind System**:
+3. **Advanced Storage Architecture**:
+   - **Dual Storage System** - Separate storage keys for global vs domain-specific conversations
+   - **Chrome Local Storage** - Conversation history stored locally for fast access
+   - **Base64 Image Storage** - Custom background images encoded and stored persistently  
+   - **Smart Message Limiting** - Auto-limitation to 50 recent messages per mode to prevent storage overflow
+   - **Context Management** - Intelligent selection of recent messages for API context (up to 10k tokens)
+
+4. **UI/UX Engineering**:
+   - **Boundary Detection** - Prevents dragging chat window outside viewport boundaries
+   - **Responsive Constraints** - Enforced minimum/maximum dimensions for optimal usability
+   - **Animation System** - Smooth slide-up animations and fade-in effects for messages
+   - **Real-time Updates** - Dynamic header information showing mode, token limits, and message count
+   - **Loading States** - Animated typing indicators with bouncing dots during API calls
+
+5. **Improved Keybind System**:
    - **8 Total Keybinds** - Added completion mode switcher and chat opener
    - **Dynamic Loading** - Keybinds load from storage with backward compatibility
    - **Conflict Prevention** - Better handling of overlapping key combinations
 
-### Previous Features Added (v0.2.0):
+### Website Features Added (Previous Updates):
 
 1. **Tutorial Page** (`tutorial.html`):
    - Complete keyboard shortcuts reference (7 keybinds)
@@ -330,11 +366,11 @@ Replace the placeholder in `index.html`:
 
 ### 📋 Known Issues & Limitations (v0.3.0)
 
-#### Chat Feature (Phase 1):
-- **No Conversation Memory** - Each chat message is independent, no context retention
-- **No Chat History** - Conversations don't persist between sessions
+#### Chat Feature (Known Limitations):
+- **Context Window Management** - Very long conversations may hit token limits (auto-managed)
 - **GPT-5 Token Requirements** - GPT-5 needs high token limits (500+) to function properly
-- **Single Conversation** - Only one chat window at a time per tab
+- **Single Conversation Window** - Only one chat window at a time per tab (multiple modes available)
+- **Storage Limitations** - Conversations limited to 50 recent messages per mode to prevent storage issues
 
 #### Model-Specific Issues:
 - **Reasoning Models** - Some reasoning models may have delayed responses due to processing
@@ -342,9 +378,10 @@ Replace the placeholder in `index.html`:
 - **Fallback Behavior** - Failed requests automatically retry with Gemini 2.5 Flash Lite
 
 #### Planned Improvements:
-- **Phase 2**: Conversation history and message persistence
-- **Phase 3**: Multi-conversation support and enhanced memory system
-- **Enhanced GPT-5**: Better integration with reasoning model capabilities
+- **Enhanced Context Management**: Better handling of very long conversations
+- **Multi-Window Support**: Multiple simultaneous chat windows
+- **Advanced Memory System**: Enhanced context retention and learning
+- **Chat Export Features**: Save conversations as files
 
 ### Current Extension Configuration (v0.3.0):
 
@@ -354,9 +391,11 @@ Replace the placeholder in `index.html`:
 ```
 
 ### Extension Features in Free Launch Phase:
-- **8 Customizable Keybinds** including chat opener and completion mode switcher
-- **AI Chat Interface** with Alt+Shift+C keybind for instant access
-- **Extended Token Support** up to 62,000 tokens for chat and high-end models
+- **8 Customizable Keybinds** including chat opener (Alt+Shift+C) and completion mode switcher
+- **AI Chat Interface** with hybrid mode switching and conversation memory
+- **Chat UI Customization** - Draggable, resizable, with background images and opacity control
+- **Global & Domain Modes** - Conversations that follow you everywhere or stay site-specific
+- **Extended Token Support** up to 62,000 tokens for chat and high-end reasoning models
 - **3 Injection Modes** (Conservative/Balanced/Aggressive)
 - **Enhanced Detection** for Google Docs support
 - **Text Rewriting** with 5 AI-generated alternatives
@@ -365,13 +404,39 @@ Replace the placeholder in `index.html`:
 
 ### Complete Keybind Set (8 total):
 - `Ctrl+Space` - Trigger AI completion
-- `Alt+Shift+C` - Open AI chat interface (NEW)
+- `Alt+Shift+C` - Open AI chat interface with hybrid mode support
 - `Shift+Alt+M` - Switch completion modes (Short/Medium/Long)
 - `Alt+Shift+R` - Rewrite selected text
 - `Ctrl+Shift+Space` - Manual inject on current page
 - `Arrow Right` - Accept completion
 - `Tab` - Cycle through completions
-- `Escape` - Dismiss completions
+- `Escape` - Dismiss completions (also closes chat window when active)
+
+### 🚀 Getting Started with AI Chat (v0.2.0):
+
+#### Quick Start:
+1. **Open Chat** - Press `Alt+Shift+C` on any webpage to open the chat interface
+2. **Choose Mode** - Click the 🌐 or 📍 button to toggle between Global and Domain modes
+3. **Start Chatting** - Type your message and press Enter or click Send
+4. **Customize UI** - Click the ⚙️ settings button to customize appearance and position
+
+#### Understanding Chat Modes:
+- **🌐 Global Mode** - Perfect for general conversations, research, and tasks that span multiple websites
+- **📍 Domain Mode** - Ideal for site-specific help, context-aware assistance, and domain-focused conversations
+- **Mode Switching** - Switch anytime without losing conversations - each mode saves separately
+
+#### Customization Tips:
+- **Positioning** - Drag the chat header to move the window anywhere on your screen
+- **Sizing** - Drag the resize handle (bottom-right corner) to adjust window dimensions
+- **Backgrounds** - Upload personal images through Settings → Background Image → Upload
+- **Opacity** - Adjust transparency in settings for better page visibility while chatting
+- **Reset Options** - Use Reset Position/Size buttons in settings to return to defaults
+
+#### Advanced Features:
+- **Context Memory** - Chat remembers your entire conversation history within each mode
+- **Token Management** - Extension automatically manages conversation context for optimal AI performance
+- **Multiple Models** - Access 300+ AI models including GPT-5, Claude 4, Gemini 2.5 Pro, and DeepSeek V3.1
+- **Smart Storage** - Conversations automatically saved and restored between browser sessions
 
 ### Privacy Integration:
 - Extension popup links to website privacy policy
@@ -431,17 +496,20 @@ Tested and working on:
 
 ## 📝 Maintenance Checklist
 
-### ✅ Completed for v0.3.0 Launch:
+### ✅ Completed for v0.2.0 Launch:
 - [x] Added AI Chat feature with Alt+Shift+C keybind
-- [x] Extended token limits to 62,000 for high-end models
+- [x] Implemented hybrid chat mode (Global vs Domain-specific)
+- [x] Added conversation memory and persistent chat history
+- [x] Created customizable chat UI (draggable, resizable, backgrounds, opacity)
+- [x] Extended token limits to 62,000 for high-end reasoning models
 - [x] Fixed GPT-5 compatibility with proper token handling
 - [x] Enhanced Gemini 2.5 Pro reasoning model support
 - [x] Updated keybind system to 8 customizable shortcuts
-- [x] Implemented chat UI with dark theme matching extension
-- [x] Added smart token management and settings display
-- [x] Created comprehensive chat API integration
-- [x] Updated all documentation to reflect v0.3.0 features
-- [x] All previous v0.2.0 features maintained and improved
+- [x] Implemented comprehensive chat UI manager with settings panel
+- [x] Added smart token management and mode indicators
+- [x] Created robust conversation storage system
+- [x] Updated all documentation to reflect v0.2.0 features
+- [x] All previous website features maintained and improved
 
 ### Before Chrome Web Store Submission:
 - [ ] Add actual demo video/screenshots to replace placeholder
@@ -476,17 +544,17 @@ Tested and working on:
 
 ### Chat Development Roadmap:
 
-#### Phase 2 (Next Update - v0.4.0):
-- **Conversation History** - Persistent chat history across sessions
-- **Context Memory** - Maintain conversation context within single sessions
-- **Chat Export** - Save conversations as text or markdown files
-- **Model Switching** - Change AI models mid-conversation
-
-#### Phase 3 (Future - v0.5.0):
-- **Multi-Conversation Support** - Multiple chat tabs/windows simultaneously
-- **Advanced Memory System** - Long-term context retention and learning
+#### Phase 2 (Next Update - v0.3.0):
+- **Chat Export Features** - Save conversations as text, markdown, or JSON files
+- **Model Switching** - Change AI models mid-conversation without losing context
+- **Enhanced Context Management** - Better handling of very long conversations
 - **Chat Templates** - Pre-built conversation starters for different use cases
+
+#### Phase 3 (Future - v0.4.0):
+- **Multi-Window Support** - Multiple simultaneous chat windows per tab
+- **Advanced Memory System** - Cross-conversation learning and enhanced context retention
 - **Collaborative Features** - Share conversations and templates
+- **AI Assistant Personas** - Customizable AI personalities and specialized modes
 
 ### Planned Extension Features (Future Versions):
 - **Premium Tier** (post-free launch phase) - Advanced AI models and features
@@ -520,9 +588,11 @@ For issues or questions about the website:
 - **This Repository** (`origin-website`): Public website files served by GitHub Pages
 - **Extension Repository** (`origin-extension`): Private Chrome extension source code
 
-**Key Files for Extension v0.3.0:**
+**Key Files for Extension v0.2.0:**
 - Current version in Free Launch Phase with all premium features unlocked
-- 7 customizable keybinds including completion mode switcher
+- 8 customizable keybinds including chat opener (Alt+Shift+C) and completion mode switcher
+- Hybrid chat mode with global/domain conversation switching
+- Conversation memory and UI customization features
 - Support for 300+ AI models via OpenRouter API
 - Enhanced Google Docs compatibility with Aggressive injection mode
 

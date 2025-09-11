@@ -1562,7 +1562,24 @@ chrome.runtime.onMessage.addListener((request, _sender, sendResponse) => {
           logger.log('🎯 No system prompt for chat (better for natural responses)');
         }
         
+        // Add conversation history for context
+        if (request.conversationHistory && Array.isArray(request.conversationHistory)) {
+          logger.log(`📚 Adding ${request.conversationHistory.length} messages from conversation history`);
+          
+          request.conversationHistory.forEach((msg: any) => {
+            if (msg.role && msg.content) {
+              messages.push({ 
+                role: msg.role === 'user' ? 'user' : 'assistant', 
+                content: msg.content 
+              });
+            }
+          });
+        }
+        
+        // Add current message
         messages.push({ role: "user", content: request.message });
+        
+        logger.log(`💬 Total messages in context: ${messages.length}`);
         
         const requestBody = {
           model: modelId,
