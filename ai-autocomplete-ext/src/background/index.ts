@@ -1495,6 +1495,232 @@ chrome.runtime.onMessage.addListener((request, _sender, sendResponse) => {
   }
   
   // Handle request for rewriting selected text
+  if (request.type === "GET_CHAT_RESPONSE") {
+    logger.log('Processing GET_CHAT_RESPONSE request');
+    
+    // Check consent before processing any API requests
+    checkHasConsented().then(async (hasConsent) => {
+      if (!hasConsent) {
+        logger.error('User has not consented, blocking API request');
+        sendResponse({ error: 'Privacy consent required. Please complete the consent process.' });
+        return;
+      }
+      
+      // Get encrypted API key first
+      const apiKey = await retrieveApiKey();
+      
+      chrome.storage.sync.get(['selectedModel', 'modelSettings', 'customSystemPrompt'], async (result) => {
+        logger.log('=============== CHAT REQUEST ===============');
+        logger.log('Retrieved settings from storage');
+        logger.log('🚀 ACTIVE MODEL:', result.selectedModel || 'google/gemini-2.5-flash-lite');
+        logger.log('Temperature:', result.modelSettings?.temperature || 0.7);
+        
+        if (!apiKey) {
+          const errorMsg = "⚠️ No API key found. Please click the extension icon and enter your OpenRouter API key.";
+          logger.error(errorMsg);
+          sendResponse({ 
+            error: errorMsg,
+            errorType: 'missing_api_key'
+          });
+          return;
+        }
+        
+        // Basic API key validation
+        if (apiKey.length < 20 || !apiKey.startsWith('sk-')) {
+          const errorMsg = "⚠️ Invalid API key format. OpenRouter API keys should start with 'sk-' and be at least 20 characters long.";
+          logger.error(errorMsg);
+          sendResponse({ 
+            error: errorMsg,
+            errorType: 'invalid_api_key'
+          });
+          return;
+        }
+        
+        const modelId = result.selectedModel || 'google/gemini-2.5-flash-lite';
+        const temperature = result.modelSettings?.temperature || 0.7;
+        const maxTokens = result.modelSettings?.maxTokens || 500;
+        
+        logger.log('💬 Chat message:', request.message);
+        logger.log('📊 Message length:', request.message.length, 'characters');
+        
+        // Build the request headers
+        const requestHeaders = {
+          'Authorization': `Bearer ${apiKey}`,
+          'Content-Type': 'application/json',
+          'HTTP-Referer': `chrome-extension://${chrome.runtime.id}`,
+          'X-Title': 'AI Autocomplete Extension'
+        };
+        
+        // Build messages array - only include system prompt if user has custom prompt
+        const messages: any[] = [];
+        
+        // Only add system prompt if user has explicitly set a custom prompt
+        if (result.customSystemPrompt && result.customSystemPrompt.trim()) {
+          logger.log('🎯 Using custom system prompt for chat');
+          messages.push({ role: "system", content: result.customSystemPrompt.trim() });
+        } else {
+          logger.log('🎯 No system prompt for chat (better for natural responses)');
+        }
+        
+        messages.push({ role: "user", content: request.message });
+        
+        const requestBody = {
+          model: modelId,
+          messages: messages,
+          temperature: temperature,
+          max_tokens: maxTokens
+        };
+        
+        logger.log('📤 Sending chat request to OpenRouter...');
+        logger.log('Model:', modelId);
+        
+        try {
+          const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+            method: 'POST',
+            headers: requestHeaders,
+            body: JSON.stringify(requestBody)
+          });
+          
+          logger.log('📥 Response status:', response.status);
+          
+          if (!response.ok) {
+            const errorText = await response.text();
+            logger.error('API Error Response:', errorText);
+            
+            let userMessage = 'Failed to get chat response. ';
+            
+            if (response.status === 401 || response.status === 403) {
+              userMessage = 'Invalid API key. Please check your OpenRouter API key in settings.';
+            } else if (response.status === 402) {
+              userMessage = 'Insufficient credits. Please add credits to your OpenRouter account.';
+            } else if (response.status === 429) {
+              userMessage = 'Rate limit exceeded. Please wait a moment and try again.';
+            } else {
+              userMessage += `Error: ${response.status}`;
+            }
+            
+            sendResponse({ error: userMessage });
+            return;
+          }
+          
+          const data = await response.json();
+          logger.log('✅ Chat response received');
+          
+          // Log the full response structure to debug Gemini issues
+          logger.log('📊 Full response data:', JSON.stringify(data, null, 2));
+          
+          // Extract chat response - handle reasoning models
+          let chatResponse = '';
+          
+          if (data.choices && data.choices.length > 0) {
+            const choice = data.choices[0];
+            const message = choice?.message;
+            
+            // Log what fields are present in the message
+            logger.log('📋 Message fields present:', {
+              hasContent: !!message?.content,
+              contentPreview: message?.content?.substring(0, 100),
+              hasReasoning: !!message?.reasoning,
+              reasoningPreview: message?.reasoning?.substring(0, 100),
+              hasText: !!choice?.text,
+              textPreview: choice?.text?.substring(0, 100)
+            });
+            
+            // First try to get content from the standard field
+            chatResponse = message?.content || choice?.text || '';
+            
+            // For GPT-5 and other reasoning models, check the reasoning field
+            if (!chatResponse && message?.reasoning) {
+              logger.log('🤔 Reasoning model detected - checking reasoning field');
+              
+              // For GPT-5, the reasoning field contains thinking, NOT the actual response
+              // We should NOT use it as the chat response
+              if (modelId.includes('gpt-5')) {
+                logger.log('🔍 GPT-5: Reasoning field contains thinking process, not response');
+                logger.log('📋 GPT-5 reasoning preview:', message.reasoning?.substring(0, 200));
+                // Don't use reasoning as response for GPT-5 in chat
+                // Will trigger fallback below
+              } else if (!modelId.includes('gemini')) {
+                // For other reasoning models (not Gemini), use reasoning field
+                chatResponse = message.reasoning;
+                logger.log('📋 Extracted response from reasoning field');
+              }
+            }
+            
+            // For GPT-5: Always use fallback model since it returns empty content
+            if (!chatResponse && modelId.includes('gpt-5')) {
+              logger.log('🔄 GPT-5 returned empty content, using fallback model');
+              
+              // Check if there's encrypted reasoning (for logging purposes)
+              const reasoningDetails = message?.reasoning_details;
+              if (reasoningDetails && Array.isArray(reasoningDetails)) {
+                const hasEncrypted = reasoningDetails.some((detail: any) => 
+                  detail.type === 'reasoning.encrypted'
+                );
+                if (hasEncrypted) {
+                  logger.log('🔐 GPT-5 has encrypted reasoning');
+                }
+              }
+              
+              // Always use fallback model for GPT-5 chat responses
+              try {
+                logger.log('📤 Making fallback request with Gemini...');
+                const fallbackBody = {
+                  model: 'google/gemini-2.5-flash-lite', // Use reliable fallback model
+                  messages: messages, // Use the same messages array (with or without system prompt)
+                  temperature: temperature,
+                  max_tokens: maxTokens
+                };
+                
+                const fallbackResponse = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+                  method: 'POST',
+                  headers: requestHeaders,
+                  body: JSON.stringify(fallbackBody)
+                });
+                
+                if (fallbackResponse.ok) {
+                  const fallbackData = await fallbackResponse.json();
+                  const fallbackContent = fallbackData.choices?.[0]?.message?.content || 
+                                           fallbackData.choices?.[0]?.text;
+                  if (fallbackContent) {
+                    chatResponse = fallbackContent;
+                    logger.log('✅ Fallback model (Gemini) provided response');
+                  } else {
+                    logger.error('Fallback model returned empty response');
+                  }
+                } else {
+                  const errorText = await fallbackResponse.text();
+                  logger.error('Fallback request failed:', errorText);
+                }
+              } catch (fallbackError) {
+                logger.error('Fallback request error:', fallbackError);
+                chatResponse = "I apologize, but I'm having trouble processing your request. Please try again or switch to a different model.";
+              }
+            }
+          }
+          
+          if (!chatResponse) {
+            logger.error('No content in response:', JSON.stringify(data));
+            sendResponse({ error: 'No response generated. Please try again with a different model.' });
+            return;
+          }
+          
+          logger.log('💬 Chat response:', chatResponse.substring(0, 200) + '...');
+          sendResponse({ response: chatResponse });
+          
+        } catch (error) {
+          logger.error('Network error during chat request:', error);
+          sendResponse({ error: 'Network error. Please check your connection and try again.' });
+        }
+      });
+    }).catch(error => {
+      logger.error('Error checking consent:', error);
+      sendResponse({ error: 'Failed to verify consent status. Please refresh the page.' });
+    });
+    
+    return true; // Keep message channel open for async response
+  }
+  
   if (request.type === "GET_REWRITE") {
     logger.log('Processing GET_REWRITE request');
     

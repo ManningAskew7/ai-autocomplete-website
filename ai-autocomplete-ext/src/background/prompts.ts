@@ -143,6 +143,41 @@ export const NUMBERED_LIST_PROMPT_LONG = `Complete the given text with 5 paragra
 INSTRUCTIONS: Generate exactly 5 different paragraph completions, each 50-100 words.`;
 
 /**
+ * CHAT SYSTEM PROMPT - For interactive chat conversations
+ * Used when users open the chat interface to have a conversation
+ * 
+ * NOTE: Keeping this minimal to allow models to use their natural behavior
+ * Too many restrictions can cause weird responses (e.g., Gemini saying "Ooh..." to math questions)
+ */
+export const CHAT_SYSTEM_PROMPT = `You are a helpful AI assistant.`;
+
+/**
+ * Get the chat system prompt with optional custom user preferences
+ * 
+ * @param customPrompt - Optional custom prompt from user settings
+ * @returns The combined system prompt for chat interactions
+ */
+export function getChatSystemPrompt(customPrompt?: string): string {
+  // If user has provided a custom prompt, prepend it with the header
+  if (customPrompt && customPrompt.trim()) {
+    const userStyleSection = `# User Preferences:
+${customPrompt.trim()}
+
+Apply the above preferences while following the core guidelines below.
+
+---
+
+`;
+    
+    // Prepend user preferences to the base chat prompt
+    return userStyleSection + CHAT_SYSTEM_PROMPT;
+  }
+  
+  // No custom prompt - use base chat prompt
+  return CHAT_SYSTEM_PROMPT;
+}
+
+/**
  * Legacy prompt for backward compatibility (same as SHORT mode)
  */
 export const MULTIPLE_COMPLETIONS_PROMPT = SHORT_MODE_PROMPT;

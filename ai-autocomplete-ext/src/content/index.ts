@@ -1,5 +1,6 @@
 import { logger } from './content-logger';
 import { detectTextElement, getActiveTextElement, findAllTextElements, getSelectedText, type TextElement } from './universal-detector';
+import { ChatUIManager } from './chat-ui-manager';
 
 // Prevent multiple injections
 (() => {
@@ -419,6 +420,7 @@ interface Keybinds {
   dismiss: string;
   manualInject: string; // New keybind for manual injection
   rewrite: string; // Keybind for rewriting selected text
+  openChat?: string; // Keybind for opening chat interface
 }
 
 class KeybindManager {
@@ -428,7 +430,8 @@ class KeybindManager {
     cycle: 'tab',
     dismiss: 'escape',
     manualInject: 'ctrl+shift+space', // Default manual injection keybind
-    rewrite: 'alt+shift+r' // Default rewrite keybind (Alt+Shift+R)
+    rewrite: 'alt+shift+r', // Default rewrite keybind (Alt+Shift+R)
+    openChat: 'alt+shift+c' // Default chat keybind (Alt+Shift+C)
   };
   
   constructor() {
@@ -450,7 +453,8 @@ class KeybindManager {
       cycle: 'tab', 
       dismiss: 'escape',
       manualInject: 'ctrl+shift+space',
-      rewrite: 'alt+shift+r'
+      rewrite: 'alt+shift+r',
+      openChat: 'alt+shift+c'
     };
   }
   
@@ -471,8 +475,11 @@ class KeybindManager {
     if (!binding) {
       // If keybind is undefined, use default
       const defaults = this.getDefaultKeybinds();
-      this.keybinds[action] = defaults[action];
-      logger.warn(`⚠️ Keybind for '${action}' was undefined, using default: ${defaults[action]}`);
+      const defaultBinding = defaults[action];
+      if (defaultBinding) {
+        this.keybinds[action] = defaultBinding;
+        logger.warn(`⚠️ Keybind for '${action}' was undefined, using default: ${defaultBinding}`);
+      }
       return false;
     }
     const bindingLower = binding.toLowerCase();
@@ -517,6 +524,7 @@ class KeybindManager {
   
   getKeybindDisplay(action: keyof Keybinds): string {
     const binding = this.keybinds[action];
+    if (!binding) return '';
     // Convert to display format
     const parts = binding.split('+').map(part => {
       const p = part.toLowerCase();
@@ -545,6 +553,9 @@ class KeybindManager {
 
 // Initialize keybind manager
 const keybindManager = new KeybindManager();
+
+// Initialize Chat UI Manager
+const chatUI = new ChatUIManager();
 
 // Completion Mode Manager
 class CompletionModeManager {
@@ -2147,6 +2158,14 @@ document.addEventListener('keydown', (event) => {
       // Ignore errors, we're already injected
     });
     
+    return;
+  }
+  
+  // Handle chat keybind for opening AI chat
+  if (keybindManager.matchesKeybind(event, 'openChat')) {
+    logger.log(`💬 Chat key (${keybindManager.getKeybindDisplay('openChat')}) detected!`);
+    event.preventDefault();
+    chatUI.toggle();
     return;
   }
   

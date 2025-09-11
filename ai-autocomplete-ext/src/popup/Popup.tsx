@@ -37,6 +37,7 @@ interface Keybinds {
   rewrite: string;
   manualInject: string;
   completionMode: string;
+  openChat?: string;
 }
 
 type CompletionMode = 'short' | 'medium' | 'long';
@@ -72,7 +73,8 @@ const Popup = () => {
       dismiss: 'escape',
       rewrite: 'alt+shift+r',
       manualInject: 'ctrl+shift+space',
-      completionMode: 'shift+alt+m'
+      completionMode: 'shift+alt+m',
+      openChat: 'alt+shift+c'
     },
     completionMode: 'short'
   });
@@ -136,7 +138,8 @@ const Popup = () => {
             dismiss: 'escape',
             rewrite: 'alt+shift+r',
             manualInject: 'ctrl+shift+space',
-            completionMode: 'shift+alt+m'
+            completionMode: 'shift+alt+m',
+            openChat: 'alt+shift+c'
           },
           completionMode: result.completionMode || 'short'
         });
@@ -572,9 +575,9 @@ const Popup = () => {
             </div>
             <input
               type="range"
-              min="10"
-              max="500"
-              step="10"
+              min="100"
+              max="62000"
+              step="100"
               value={settings.modelSettings.maxTokens}
               onChange={(e) => setSettings({
                 ...settings,
@@ -585,7 +588,8 @@ const Popup = () => {
               })}
             />
             <div className="help-text">
-              Automatically set by completion mode (Short: 100, Medium: 200, Long: 400)
+              For autocomplete: Limited by mode (Short: 100, Medium: 200, Long: 400)<br/>
+              For chat: Uses full token value (current: {settings.modelSettings.maxTokens})
             </div>
           </div>
         </div>
@@ -1186,6 +1190,25 @@ const Popup = () => {
             <div className="help-text">Cycle through Short, Medium, and Long completion modes on the fly</div>
           </div>
 
+          <div className="form-group">
+            <label>Open AI Chat</label>
+            <select
+              value={settings.keybinds.openChat || 'alt+shift+c'}
+              onChange={(e) => setSettings({
+                ...settings,
+                keybinds: { ...settings.keybinds, openChat: e.target.value }
+              })}
+              style={{ width: '100%', padding: '8px', borderRadius: '4px', border: '1px solid #ddd' }}
+            >
+              <option value="alt+shift+c">Alt + Shift + C (Default)</option>
+              <option value="ctrl+shift+c">Ctrl + Shift + C</option>
+              <option value="ctrl+alt+c">Ctrl + Alt + C</option>
+              <option value="alt+c">Alt + C</option>
+              <option value="ctrl+shift+h">Ctrl + Shift + H</option>
+            </select>
+            <div className="help-text">Open AI chat window to have a conversation with the AI</div>
+          </div>
+
           <button
             onClick={() => {
               const defaultKeybinds = {
@@ -1195,7 +1218,8 @@ const Popup = () => {
                 dismiss: 'escape',
                 rewrite: 'alt+shift+r',
                 manualInject: 'ctrl+shift+space',
-                completionMode: 'shift+alt+m'
+                completionMode: 'shift+alt+m',
+                openChat: 'alt+shift+c'
               };
               setSettings({ ...settings, keybinds: defaultKeybinds });
             }}
