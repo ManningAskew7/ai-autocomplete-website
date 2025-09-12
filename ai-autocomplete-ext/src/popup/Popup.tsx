@@ -1260,57 +1260,6 @@ const Popup = () => {
           <span>{status.message}</span>
         </div>
       )}
-      
-      <div style={{
-        marginTop: '20px',
-        paddingTop: '16px',
-        borderTop: '1px solid #e5e7eb',
-        textAlign: 'center'
-      }}>
-        <div style={{
-          display: 'flex',
-          justifyContent: 'center',
-          gap: '16px',
-          fontSize: '13px'
-        }}>
-          <a 
-            href="https://manningaskew7.github.io/ai-autocomplete-website/tutorial.html"
-            target="_blank"
-            rel="noopener noreferrer"
-            style={{
-              color: '#1890ff',
-              textDecoration: 'none',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '4px'
-            }}
-          >
-            📚 Tutorial
-          </a>
-          <a 
-            href="https://manningaskew7.github.io/ai-autocomplete-website/"
-            target="_blank"
-            rel="noopener noreferrer"
-            style={{
-              color: '#1890ff',
-              textDecoration: 'none'
-            }}
-          >
-            🌐 Website
-          </a>
-          <a 
-            href="https://github.com/ManningAskew7/ai-autocomplete-website/issues"
-            target="_blank"
-            rel="noopener noreferrer"
-            style={{
-              color: '#1890ff',
-              textDecoration: 'none'
-            }}
-          >
-            🐛 Report Issue
-          </a>
-        </div>
-      </div>
     </div>
   );
 };
