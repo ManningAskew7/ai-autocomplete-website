@@ -14,6 +14,25 @@ interface ChatUISettings {
   opacity?: number; // 0.5 to 1
 }
 
+interface DomainPermissions {
+  [domain: string]: {
+    allowed: boolean;
+    timestamp: number;
+    alwaysAllow?: boolean;
+  };
+}
+
+interface WebpageContext {
+  url: string;
+  title: string;
+  domain: string;
+  mainContent: string;
+  headings: string[];
+  selectedText?: string;
+  characterCount: number;
+  estimatedTokens: number;
+}
+
 export class ChatUIManager {
   private chatContainer: HTMLElement | null = null;
   private messagesContainer: HTMLElement | null = null;
@@ -38,11 +57,17 @@ export class ChatUIManager {
     backgroundImage: undefined,
     opacity: 0.95
   };
+  
+  // Context extraction properties
+  private domainPermissions: DomainPermissions = {};
+  private contextIncluded: boolean = false;
+  private pageContext: WebpageContext | null = null;
 
   constructor() {
     logger.log('ChatUIManager initialized');
     this.initializeConversation();
     this.loadUISettings();
+    this.loadDomainPermissions();
   }
 
   private async loadUISettings(): Promise<void> {
@@ -51,6 +76,21 @@ export class ChatUIManager {
         this.uiSettings = { ...this.uiSettings, ...result.chatUISettings };
         logger.log('UI settings loaded:', this.uiSettings);
       }
+    });
+  }
+
+  private async loadDomainPermissions(): Promise<void> {
+    chrome.storage.local.get(['domainPermissions'], (result) => {
+      if (result.domainPermissions) {
+        this.domainPermissions = result.domainPermissions;
+        logger.log('Domain permissions loaded');
+      }
+    });
+  }
+
+  private async saveDomainPermissions(): Promise<void> {
+    chrome.storage.local.set({ domainPermissions: this.domainPermissions }, () => {
+      logger.log('Domain permissions saved');
     });
   }
 
@@ -79,12 +119,22 @@ export class ChatUIManager {
     return `chat_history_${domain}`;
   }
 
-  private toggleChatMode(): void {
+  private async toggleChatMode(): Promise<void> {
     // Save current conversation before switching
     this.saveConversationHistory();
     
     // Toggle mode
     const newMode = this.chatMode === 'global' ? 'domain' : 'global';
+    
+    // Check permissions if switching to domain mode
+    if (newMode === 'domain') {
+      const hasPermission = await this.checkDomainPermission();
+      if (!hasPermission) {
+        logger.log('Domain mode permission denied');
+        return; // Don't switch if permission denied
+      }
+    }
+    
     this.chatMode = newMode;
     
     // Save mode preference
@@ -92,6 +142,7 @@ export class ChatUIManager {
     
     // Clear current conversation from UI
     this.currentConversation = [];
+    this.contextIncluded = false; // Reset context flag
     if (this.messagesContainer) {
       this.messagesContainer.innerHTML = '';
     }
@@ -789,7 +840,7 @@ export class ChatUIManager {
     document.body.appendChild(this.chatContainer);
   }
 
-  private sendMessage(): void {
+  private async sendMessage(): Promise<void> {
     if (!this.inputField || !this.inputField.value.trim() || this.isLoading) return;
 
     const message = this.inputField.value.trim();
@@ -813,6 +864,19 @@ export class ChatUIManager {
     // Set loading state
     this.setLoading(true);
 
+    // Check if we should include page context (first message in domain mode)
+    if (this.chatMode === 'domain' && !this.contextIncluded && this.currentConversation.length === 1) {
+      logger.log('Extracting page context for domain mode...');
+      // Extract and store page context
+      this.pageContext = this.extractPageContext();
+      this.contextIncluded = true;
+      
+      logger.log(`Page context extracted: ${this.pageContext.domain}, ${this.pageContext.characterCount} chars`);
+      
+      // Show context indicator
+      this.showContextIndicator();
+    }
+    
     // Send message to background script with conversation history
     this.sendToBackground(message);
   }
@@ -945,6 +1009,33 @@ export class ChatUIManager {
     }
   }
 
+  private showContextIndicator(): void {
+    if (!this.messagesContainer || !this.pageContext) return;
+    
+    const indicator = document.createElement('div');
+    indicator.style.cssText = `
+      background: rgba(74, 158, 255, 0.1);
+      border: 1px solid #4a9eff;
+      color: #4a9eff;
+      padding: 8px 12px;
+      margin: 8px;
+      border-radius: 6px;
+      font-size: 12px;
+      text-align: center;
+      animation: ai-autocomplete-fadeIn 0.3s ease-out;
+    `;
+    
+    indicator.innerHTML = `
+      📄 Page context included 
+      <span style="opacity: 0.7;">
+        (~${this.pageContext.estimatedTokens.toLocaleString()} tokens)
+      </span>
+    `;
+    
+    this.messagesContainer.appendChild(indicator);
+    this.scrollToBottom();
+  }
+
   private async sendToBackground(message: string): Promise<void> {
     try {
       // Check if extension context is still valid
@@ -956,11 +1047,19 @@ export class ChatUIManager {
       // Limit to recent messages to avoid token limits
       const contextMessages = this.getContextMessages();
 
-      // Send message to background script with conversation history
+      // Send page context separately to be added as system prompt
+      let pageContextToSend = null;
+      if (this.chatMode === 'domain' && this.pageContext && this.contextIncluded) {
+        pageContextToSend = this.pageContext;
+        logger.log('Sending page context with message (will be added to system prompt)');
+      }
+      
+      // Send message to background script with conversation history and page context
       chrome.runtime.sendMessage({
         type: 'GET_CHAT_RESPONSE',
         message: message,
-        conversationHistory: contextMessages
+        conversationHistory: contextMessages,
+        pageContext: pageContextToSend
       }, (response) => {
         if (chrome.runtime.lastError) {
           logger.error('Error sending chat message:', chrome.runtime.lastError);
@@ -1250,6 +1349,205 @@ export class ChatUIManager {
     }
   }
 
+  private async checkDomainPermission(): Promise<boolean> {
+    const domain = window.location.hostname;
+    
+    // Check if we already have permission for this domain
+    if (this.domainPermissions[domain]?.alwaysAllow) {
+      logger.log(`Domain ${domain} has permanent permission`);
+      return true;
+    }
+    
+    // Show permission dialog
+    return new Promise((resolve) => {
+      this.showPermissionDialog((allowed, alwaysAllow) => {
+        // Save permission
+        this.domainPermissions[domain] = {
+          allowed,
+          timestamp: Date.now(),
+          alwaysAllow
+        };
+        
+        if (alwaysAllow) {
+          this.saveDomainPermissions();
+        }
+        
+        resolve(allowed);
+      });
+    });
+  }
+
+  private showPermissionDialog(callback: (allowed: boolean, alwaysAllow: boolean) => void): void {
+    // Create overlay
+    const overlay = document.createElement('div');
+    overlay.style.cssText = `
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.7);
+      z-index: 2147483648;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      animation: fadeIn 0.2s ease-out;
+    `;
+    
+    // Create dialog
+    const dialog = document.createElement('div');
+    dialog.style.cssText = `
+      background: #1a1a1a;
+      border: 1px solid #3a3a3a;
+      border-radius: 12px;
+      padding: 24px;
+      max-width: 450px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
+      animation: slideUp 0.3s ease-out;
+    `;
+    
+    dialog.innerHTML = `
+      <h3 style="color: #fff; margin: 0 0 16px; font-size: 18px;">
+        Enable Page Context for ${window.location.hostname}?
+      </h3>
+      <div style="color: #ff9a4a; background: rgba(255, 154, 74, 0.1); padding: 12px; border-radius: 8px; margin-bottom: 16px;">
+        <div style="font-weight: bold; margin-bottom: 8px;">⚠️ Warning</div>
+        <div style="font-size: 14px; line-height: 1.4;">
+          Page content will be sent to the AI. Only enable on sites without sensitive information like:
+          <ul style="margin: 8px 0 0 20px;">
+            <li>Banking or financial data</li>
+            <li>Personal health information</li>
+            <li>Private messages or emails</li>
+            <li>Password or credit card forms</li>
+          </ul>
+        </div>
+      </div>
+      <div style="margin-bottom: 20px;">
+        <label style="color: #aaa; font-size: 14px; display: flex; align-items: center; cursor: pointer;">
+          <input type="checkbox" id="always-allow" style="margin-right: 8px; cursor: pointer;">
+          Don't ask again for this site
+        </label>
+      </div>
+      <div style="display: flex; gap: 12px; justify-content: flex-end;">
+        <button id="deny-btn" style="
+          background: #3a3a3a;
+          border: 1px solid #4a4a4a;
+          color: #ddd;
+          padding: 8px 20px;
+          border-radius: 6px;
+          cursor: pointer;
+          font-size: 14px;
+        ">Deny</button>
+        <button id="allow-btn" style="
+          background: #4a9eff;
+          border: none;
+          color: white;
+          padding: 8px 20px;
+          border-radius: 6px;
+          cursor: pointer;
+          font-size: 14px;
+        ">Allow This Time</button>
+      </div>
+    `;
+    
+    // Add event handlers
+    const checkbox = dialog.querySelector('#always-allow') as HTMLInputElement;
+    const denyBtn = dialog.querySelector('#deny-btn') as HTMLButtonElement;
+    const allowBtn = dialog.querySelector('#allow-btn') as HTMLButtonElement;
+    
+    denyBtn.onclick = () => {
+      overlay.remove();
+      callback(false, false);
+    };
+    
+    allowBtn.onclick = () => {
+      overlay.remove();
+      callback(true, checkbox.checked);
+    };
+    
+    // Update button text when checkbox changes
+    checkbox.onchange = () => {
+      allowBtn.textContent = checkbox.checked ? 'Always Allow' : 'Allow This Time';
+    };
+    
+    overlay.appendChild(dialog);
+    document.body.appendChild(overlay);
+  }
+
+  private extractPageContext(): WebpageContext {
+    const maxChars = 80000; // ~20,000 tokens
+    
+    // Extract main content
+    const mainContent = this.extractMainContent(maxChars);
+    
+    // Extract headings
+    const headings = Array.from(document.querySelectorAll('h1, h2, h3'))
+      .slice(0, 20) // Limit to 20 headings
+      .map(h => h.textContent?.trim() || '')
+      .filter(h => h.length > 0);
+    
+    // Get selected text if any
+    const selectedText = window.getSelection()?.toString().trim();
+    
+    const context: WebpageContext = {
+      url: window.location.href,
+      title: document.title,
+      domain: window.location.hostname,
+      mainContent,
+      headings,
+      selectedText: selectedText?.length ? selectedText : undefined,
+      characterCount: mainContent.length,
+      estimatedTokens: Math.ceil(mainContent.length / 4)
+    };
+    
+    logger.log(`Extracted page context: ${context.characterCount} chars, ~${context.estimatedTokens} tokens`);
+    return context;
+  }
+
+  private extractMainContent(maxChars: number): string {
+    let content = '';
+    
+    // Priority 1: Try to find main content areas
+    const mainSelectors = ['main', 'article', '[role="main"]', '#content', '.content'];
+    for (const selector of mainSelectors) {
+      const element = document.querySelector(selector);
+      if (element) {
+        content = this.getTextContent(element as HTMLElement);
+        if (content.length > 100) break; // Found substantial content
+      }
+    }
+    
+    // Priority 2: Fall back to body if no main content found
+    if (content.length < 100) {
+      content = this.getTextContent(document.body);
+    }
+    
+    // Clean and truncate
+    content = content
+      .replace(/\s+/g, ' ') // Normalize whitespace
+      .trim();
+    
+    if (content.length > maxChars) {
+      content = content.substring(0, maxChars) + '\n[Content truncated at 80k characters]';
+    }
+    
+    return content;
+  }
+
+  private getTextContent(element: HTMLElement): string {
+    // Clone the element to avoid modifying the actual DOM
+    const clone = element.cloneNode(true) as HTMLElement;
+    
+    // Remove script and style elements
+    clone.querySelectorAll('script, style, noscript').forEach(el => el.remove());
+    
+    // Remove hidden elements
+    clone.querySelectorAll('[hidden], [aria-hidden="true"]').forEach(el => el.remove());
+    
+    // Get text content
+    return clone.textContent || '';
+  }
+
   private toggleSettings(): void {
     if (!this.settingsPanel) return;
     
@@ -1288,6 +1586,13 @@ export class ChatUIManager {
     }
     
     logger.log(`Sending ${contextMessages.length} messages as context (${totalChars} chars)`);
+    
+    // Log message types for debugging
+    contextMessages.forEach((msg, i) => {
+      const preview = msg.content.substring(0, 50);
+      logger.log(`  Context msg ${i + 1}: ${msg.role} - ${preview}...`);
+    });
+    
     return contextMessages;
   }
 }

@@ -1562,12 +1562,55 @@ chrome.runtime.onMessage.addListener((request, _sender, sendResponse) => {
           logger.log('🎯 No system prompt for chat (better for natural responses)');
         }
         
+        // Add page context if provided (domain mode)
+        if (request.pageContext) {
+          logger.log(`📄 Adding page context to system prompt: ${request.pageContext.characterCount} chars, ~${request.pageContext.estimatedTokens} tokens`);
+          
+          // Create a well-formatted context message with clear markdown
+          const contextMessage = `# WEBPAGE CONTEXT
+
+You are helping the user who is currently viewing the following webpage. Use this information to answer their questions about the page content.
+
+## Current Page Information
+
+**Website:** ${request.pageContext.domain}
+**Page Title:** ${request.pageContext.title}
+**URL:** ${request.pageContext.url}
+
+## Page Structure
+**Main Headings:**
+${request.pageContext.headings.map((h: string) => `- ${h}`).join('\n')}
+
+${request.pageContext.selectedText ? `## User Selected Text\n"${request.pageContext.selectedText}"\n` : ''}
+
+## Page Content
+Below is the extracted text content from the webpage (${request.pageContext.characterCount} characters):
+
+---
+${request.pageContext.mainContent}
+---
+
+**Note:** This is the actual content of the webpage the user is viewing. Use this information to provide accurate, context-aware responses about the page.`;
+          
+          // Add as a system message that clearly indicates this is reference material
+          messages.push({ 
+            role: "system", 
+            content: contextMessage
+          });
+          
+          logger.log('✅ Page context added to system prompt');
+        }
+        
         // Add conversation history for context
         if (request.conversationHistory && Array.isArray(request.conversationHistory)) {
           logger.log(`📚 Adding ${request.conversationHistory.length} messages from conversation history`);
           
-          request.conversationHistory.forEach((msg: any) => {
+          request.conversationHistory.forEach((msg: any, index: number) => {
             if (msg.role && msg.content) {
+              // Log first 80 chars of each message for debugging
+              const preview = msg.content.substring(0, 80).replace(/\n/g, ' ');
+              logger.log(`  History ${index + 1} [${msg.role}]: ${preview}${msg.content.length > 80 ? '...' : ''}`);
+              
               messages.push({ 
                 role: msg.role === 'user' ? 'user' : 'assistant', 
                 content: msg.content 
@@ -1579,7 +1622,14 @@ chrome.runtime.onMessage.addListener((request, _sender, sendResponse) => {
         // Add current message
         messages.push({ role: "user", content: request.message });
         
-        logger.log(`💬 Total messages in context: ${messages.length}`);
+        logger.log(`💬 Total messages being sent: ${messages.length}`);
+        
+        // Log final message structure for debugging
+        logger.log('📋 Final message structure:');
+        messages.forEach((msg, i) => {
+          const preview = msg.content.substring(0, 60).replace(/\n/g, ' ');
+          logger.log(`  ${i + 1}. [${msg.role}]: ${preview}${msg.content.length > 60 ? '...' : ''}`);
+        });
         
         const requestBody = {
           model: modelId,
