@@ -164,8 +164,94 @@
         </div>
     </section>
 
-    <!-- Keyboard Shortcuts -->
+    <!-- AI Chat Assistant -->
     <section class="tutorial-section dark">
+        <div class="container">
+            <h2>💬 AI Chat Assistant</h2>
+            <p class="section-intro">Have conversations with AI while browsing, with smart webpage context awareness</p>
+
+            <div class="feature-tutorial">
+                <h3>Opening AI Chat</h3>
+                <div class="keybind-display">
+                    <kbd>Alt</kbd> + <kbd>Shift</kbd> + <kbd>C</kbd>
+                    <span class="keybind-label">Open Chat Window</span>
+                </div>
+                <div class="steps-list">
+                    <div class="step">1. Press <kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>C</kbd> on any webpage</div>
+                    <div class="step">2. The chat window appears in the bottom-right corner</div>
+                    <div class="step">3. Type your message and press Enter to send</div>
+                    <div class="step">4. AI responds using your selected model (same as autocomplete)</div>
+                    <div class="step">5. Click the X or press Esc to close the chat</div>
+                </div>
+            </div>
+
+            <div class="feature-tutorial">
+                <h3>Chat Modes: Global vs Domain-Specific</h3>
+                <div class="modes-comparison">
+                    <div class="chat-mode">
+                        <h4>🌐 Global Mode</h4>
+                        <ul>
+                            <li>Conversation follows you across all websites</li>
+                            <li>Maintains context between different sites</li>
+                            <li>Perfect for ongoing tasks and research</li>
+                            <li>History stored globally</li>
+                        </ul>
+                    </div>
+                    <div class="chat-mode">
+                        <h4>📍 Domain-Specific Mode</h4>
+                        <ul>
+                            <li>Separate conversation for each website</li>
+                            <li>AI understands the webpage content</li>
+                            <li>Automatically extracts page context</li>
+                            <li>Ideal for site-specific help</li>
+                        </ul>
+                    </div>
+                </div>
+                <p class="feature-tip">Toggle between modes using the 🌐/📍 button in the chat header</p>
+            </div>
+
+            <div class="feature-tutorial">
+                <h3>Smart Webpage Context</h3>
+                <p>When using Domain-Specific mode, the AI can understand what you're looking at:</p>
+                <div class="steps-list">
+                    <div class="step">• Automatically extracts main content from the current page</div>
+                    <div class="step">• Includes page title, headings, and relevant text</div>
+                    <div class="step">• Captures selected text for focused assistance</div>
+                    <div class="step">• Respects 80,000 character limit to prevent token overflow</div>
+                    <div class="step">• Requires one-time permission per domain for security</div>
+                </div>
+                <p class="feature-tip">💡 Select text on the page before opening chat to get AI help with specific content</p>
+            </div>
+
+            <div class="feature-tutorial">
+                <h3>Chat UI Customization</h3>
+                <p>Make the chat window your own:</p>
+                <div class="customization-options">
+                    <div class="option">
+                        <strong>⚙️ Settings Button:</strong> Access customization panel
+                    </div>
+                    <div class="option">
+                        <strong>Drag & Drop:</strong> Click and drag the header to reposition
+                    </div>
+                    <div class="option">
+                        <strong>Resize:</strong> Drag the corner handle (300x400 to 800x800px)
+                    </div>
+                    <div class="option">
+                        <strong>Background Image:</strong> Upload custom backgrounds for personality
+                    </div>
+                    <div class="option">
+                        <strong>Opacity Control:</strong> Adjust transparency (50-100%)
+                    </div>
+                    <div class="option">
+                        <strong>Reset Options:</strong> Restore default position and size anytime
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Keyboard Shortcuts -->
+    <section class="tutorial-section">
         <div class="container">
             <h2>⌨️ Complete Keyboard Reference</h2>
             
@@ -181,6 +267,11 @@
                         <td>Trigger Autocomplete</td>
                         <td><kbd>Ctrl</kbd> + <kbd>Space</kbd></td>
                         <td>Generate AI text completions at cursor</td>
+                    </tr>
+                    <tr>
+                        <td>Open AI Chat</td>
+                        <td><kbd>Alt</kbd> + <kbd>Shift</kbd> + <kbd>C</kbd></td>
+                        <td>Open the AI chat assistant window</td>
                     </tr>
                     <tr>
                         <td>Accept Suggestion</td>
