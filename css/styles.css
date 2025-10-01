@@ -505,6 +505,13 @@ section {
     letter-spacing: -1px;
 }
 
+.model-logo {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    padding: 8px;
+}
+
 .model-card h3 {
     color: var(--color-primary-bg);
     margin-bottom: var(--spacing-sm);
