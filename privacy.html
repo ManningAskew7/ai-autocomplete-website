@@ -77,8 +77,8 @@
                         <h4>What We Process:</h4>
                         <ul>
                             <li>Text you are typing in input fields (only when you press Ctrl+Space or your configured trigger key)</li>
-                            <li>Selected/highlighted text for context (not yet but to be implemented)</li>
-                            <li>Current page URL to provide relevant suggestions (not yet but to be implemented)</li>
+                            <li>Selected/highlighted text (for rewrite feature when you press Alt+Shift+R)</li>
+                            <li>Current page URL, title, and content (only in domain-specific chat mode, with explicit permission per domain)</li>
                         </ul>
                     </div>
                     
@@ -105,22 +105,40 @@
                     <div class="info-box">
                         <h4>What We Store Locally (your browser):</h4>
                         <ul>
-                            <li>Your OpenRouter API key (encrypted in Chrome sync storage)</li>
+                            <li>Your OpenRouter API key (encrypted with AES-256-GCM in Chrome sync storage)</li>
                             <li>Selected AI model preferences</li>
                             <li>Temperature and token settings</li>
-                            <li>Custom system prompts (premium feature)</li>
+                            <li>Custom system prompts</li>
                             <li>Keyboard shortcuts preferences</li>
                             <li>Privacy preferences (enhanced detection on/off, injection mode)</li>
                         </ul>
                     </div>
 
-                    <h3>3. Usage Analytics (Optional)</h3>
+                    <h3>3. Chat Conversations (Optional Feature)</h3>
                     <div class="info-box">
-                        <h4>What We May Collect (If Enabled):</h4>
+                        <h4>What We Store Locally (your browser):</h4>
                         <ul>
-                            <li>Anonymous usage statistics (feature usage frequency)</li>
-                            <li>Error reports for debugging</li>
-                            <li>No personally identifiable information</li>
+                            <li>Chat conversation history (stored in local storage, not synced)</li>
+                            <li>Chat mode preference (global vs. domain-specific)</li>
+                            <li>Chat UI customization (window position, size, appearance)</li>
+                            <li>Domain permissions tracking (which sites you've allowed page context extraction)</li>
+                        </ul>
+                        <h4>Page Context Extraction (Domain-Specific Chat Only):</h4>
+                        <ul>
+                            <li>When enabled for a domain, we extract: page URL, title, headings (up to 20), and main content (up to 80,000 characters)</li>
+                            <li>Requires explicit permission per domain with "Don't ask again" option</li>
+                            <li>Only sent to OpenRouter when you send a chat message</li>
+                            <li>Helps AI understand page context for better responses</li>
+                        </ul>
+                    </div>
+
+                    <h3>4. Usage Analytics</h3>
+                    <div class="warning-box">
+                        <h4>Current Status: Disabled</h4>
+                        <ul>
+                            <li>We do NOT currently collect any usage analytics or telemetry</li>
+                            <li>The extension includes analytics infrastructure but it is turned off</li>
+                            <li>If we enable analytics in the future, we will update this policy and require re-consent</li>
                         </ul>
                     </div>
                 </section>
@@ -141,11 +159,12 @@
                     </div>
                     
                     <div class="service-box">
-                        <h4>ExtensionPay (Premium Users Only):</h4>
+                        <h4>ExtensionPay (Currently Disabled):</h4>
                         <ul>
-                            <li>Handles payment processing for premium subscriptions (todo)</li>
-                            <li>We do not store credit card information</li>
-                            <li>Payment data is processed according to ExtensionPay's privacy policy</li>
+                            <li>Payment integration is currently disabled - all features are free</li>
+                            <li>If we enable premium features in the future, ExtensionPay would handle payment processing</li>
+                            <li>We would not store credit card information</li>
+                            <li>Payment data would be processed according to ExtensionPay's privacy policy</li>
                         </ul>
                     </div>
 
@@ -164,12 +183,13 @@
                     <h2>Data Security</h2>
                     <p>We implement security measures including:</p>
                     <ul>
-                        <li>Encryption of stored API keys</li>
-                        <li>HTTPS-only communication with APIs</li>
-                        <li>Content Security Policy to prevent XSS attacks</li>
-                        <li>User choice of injection aggression</li>
-                        <li>Minimal permission model (only essential Chrome APIs)</li>
-                        <li>Automatic exclusion of sensitive form fields</li>
+                        <li><strong>API Key Encryption:</strong> AES-256-GCM encryption with PBKDF2 key derivation (100,000 iterations)</li>
+                        <li><strong>HTTPS-Only Communication:</strong> All API requests use secure HTTPS connections</li>
+                        <li><strong>Content Security Policy:</strong> Prevents XSS attacks and code injection</li>
+                        <li><strong>No Remote Code Execution:</strong> All extension code is bundled and static - we never fetch or execute remote JavaScript</li>
+                        <li><strong>Sensitive Field Exclusion:</strong> Password fields and credit card inputs are automatically excluded from detection</li>
+                        <li><strong>Minimal Permissions:</strong> Conservative mode by default requires no special permissions</li>
+                        <li><strong>User Control:</strong> Granular permission requests with clear explanations</li>
                     </ul>
                 </section>
 
@@ -210,10 +230,15 @@
                     <div class="info-box">
                         <h4>Permissions Used:</h4>
                         <ul>
-                            <li><code>storage</code>: Save your preferences</li>
-                            <li><code>activeTab</code>: Access current tab for text extraction</li>
-                            <li><code>scripting</code>: Inject autocomplete functionality</li>
-                            <li><code>https://openrouter.ai/*</code>: Communicate with AI service</li>
+                            <li><code>storage</code>: Save your preferences and settings (encrypted for sensitive data)</li>
+                            <li><code>scripting</code>: Inject autocomplete functionality into web pages</li>
+                            <li><code>tabs</code>: Manage extension activation across tabs and show status badge</li>
+                            <li><code>clipboardWrite</code>: Copy completions to clipboard as insertion fallback method</li>
+                            <li><code>webNavigation</code> (optional): Auto-inject on page loads (balanced/aggressive modes only)</li>
+                            <li><code>https://openrouter.ai/*</code>: Communicate with AI service for completions</li>
+                            <li><code>https://extensionpay.com/*</code>: Payment processing (currently disabled)</li>
+                            <li><code>https://*/*</code> (optional): Allow injection on all HTTPS sites (balanced/aggressive modes only)</li>
+                            <li><code>http://localhost/*</code> (optional): Support local development environments</li>
                         </ul>
                     </div>
                 </section>
