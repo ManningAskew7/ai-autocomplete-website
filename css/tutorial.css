@@ -1,0 +1,382 @@
+/* Tutorial Page Specific Styles */
+
+/* Tutorial Hero */
+.tutorial-hero {
+    background: var(--color-secondary-bg);
+    padding: 100px 0 60px;
+    text-align: center;
+    border-bottom: 1px solid var(--color-border);
+}
+
+.tutorial-hero h1 {
+    font-size: 3rem;
+    margin-bottom: var(--spacing-md);
+    color: var(--color-premium-black);
+}
+
+.tutorial-hero p {
+    font-size: 1.25rem;
+    color: var(--color-text-secondary);
+}
+
+/* Tutorial Sections */
+.tutorial-section {
+    padding: var(--spacing-xxl) 0;
+}
+
+.tutorial-section.dark {
+    background: var(--color-dark-section);
+    color: var(--color-primary-bg);
+}
+
+.tutorial-section h2 {
+    font-size: 2rem;
+    margin-bottom: var(--spacing-lg);
+    color: var(--color-premium-black);
+}
+
+.tutorial-section.dark h2 {
+    color: var(--color-primary-bg);
+}
+
+.section-intro {
+    text-align: center;
+    font-size: 1.1rem;
+    color: #b0b0b0;
+    margin-bottom: var(--spacing-xl);
+}
+
+/* Tutorial Cards */
+.tutorial-card {
+    background: var(--color-primary-bg);
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius);
+    padding: var(--spacing-lg);
+    margin-bottom: var(--spacing-md);
+}
+
+.tutorial-card h3 {
+    color: var(--color-premium-black);
+    margin-bottom: var(--spacing-sm);
+}
+
+.tutorial-card p {
+    color: var(--color-text-secondary);
+}
+
+/* Modes Grid */
+.modes-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: var(--spacing-lg);
+    margin-bottom: var(--spacing-xl);
+}
+
+.mode-card {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: var(--border-radius);
+    padding: var(--spacing-xl);
+    position: relative;
+}
+
+.mode-card.recommended {
+    border-color: var(--color-accent);
+    background: rgba(74, 158, 255, 0.1);
+}
+
+.mode-card h3 {
+    color: var(--color-primary-bg);
+    margin-bottom: var(--spacing-md);
+}
+
+.mode-badge {
+    position: absolute;
+    top: var(--spacing-md);
+    right: var(--spacing-md);
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--color-primary-bg);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.mode-badge.safe {
+    background: rgba(76, 175, 80, 0.2);
+    border-color: #4caf50;
+    color: #4caf50;
+}
+
+.mode-badge.caution {
+    background: rgba(255, 152, 0, 0.2);
+    border-color: #ff9800;
+    color: #ff9800;
+}
+
+.mode-card ul {
+    list-style: none;
+    margin-bottom: var(--spacing-md);
+}
+
+.mode-card li {
+    color: #e0e0e0;
+    padding: var(--spacing-xs) 0;
+    padding-left: 20px;
+    position: relative;
+}
+
+.mode-card li:before {
+    content: "•";
+    position: absolute;
+    left: 0;
+    color: var(--color-accent);
+}
+
+.mode-tip {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 4px;
+    padding: var(--spacing-sm);
+    font-size: 0.9rem;
+    color: var(--color-primary-bg);
+}
+
+/* Feature Tutorials */
+.feature-tutorial {
+    background: var(--color-secondary-bg);
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius);
+    padding: var(--spacing-xl);
+    margin-bottom: var(--spacing-lg);
+}
+
+.feature-tutorial h3 {
+    font-size: 1.5rem;
+    margin-bottom: var(--spacing-lg);
+    color: var(--color-premium-black);
+}
+
+/* Keybind Display */
+.keybind-display {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    background: var(--color-premium-black);
+    padding: var(--spacing-md) var(--spacing-lg);
+    border-radius: var(--border-radius);
+    margin-bottom: var(--spacing-lg);
+}
+
+.keybind-display kbd {
+    background: var(--color-primary-bg);
+    color: var(--color-premium-black);
+    padding: 6px 12px;
+    border-radius: 4px;
+    font-family: var(--font-mono);
+    font-weight: 600;
+    box-shadow: 0 2px 0 rgba(0, 0, 0, 0.1);
+}
+
+.keybind-label {
+    color: var(--color-primary-bg);
+    font-weight: 500;
+    margin-left: var(--spacing-sm);
+}
+
+/* Steps List */
+.steps-list {
+    counter-reset: step-counter;
+}
+
+.step {
+    padding: var(--spacing-md);
+    margin-bottom: var(--spacing-sm);
+    background: var(--color-primary-bg);
+    border-left: 3px solid var(--color-accent);
+    border-radius: 4px;
+    position: relative;
+    padding-left: var(--spacing-xl);
+}
+
+.step kbd {
+    background: var(--color-premium-black);
+    color: var(--color-primary-bg);
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-size: 0.9rem;
+}
+
+/* Completion Modes */
+.completion-modes {
+    display: grid;
+    gap: var(--spacing-md);
+    margin-top: var(--spacing-md);
+}
+
+.mode {
+    padding: var(--spacing-md);
+    background: var(--color-primary-bg);
+    border-radius: 4px;
+    border-left: 3px solid var(--color-accent);
+}
+
+.feature-tip {
+    margin-top: var(--spacing-md);
+    padding: var(--spacing-md);
+    background: #e3f2fd;
+    border: 1px solid #2196f3;
+    border-radius: 4px;
+    color: #1976d2;
+}
+
+/* Shortcuts Table */
+.shortcuts-table {
+    margin-bottom: var(--spacing-xl);
+}
+
+.shortcuts-table h3 {
+    color: var(--color-primary-bg);
+    margin-bottom: var(--spacing-md);
+}
+
+.shortcuts-table table {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: var(--border-radius);
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.shortcuts-table th {
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--color-primary-bg);
+    padding: var(--spacing-md);
+    text-align: left;
+    font-weight: 600;
+}
+
+.shortcuts-table td {
+    padding: var(--spacing-md);
+    color: #e0e0e0;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.shortcuts-table kbd {
+    background: var(--color-primary-bg);
+    color: var(--color-premium-black);
+    padding: 3px 8px;
+    border-radius: 3px;
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+/* Tips Grid */
+.tips-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: var(--spacing-lg);
+}
+
+.tip-card {
+    background: var(--color-secondary-bg);
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius);
+    padding: var(--spacing-lg);
+    transition: var(--transition);
+}
+
+.tip-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    border-color: var(--color-accent);
+}
+
+.tip-card h3 {
+    margin-bottom: var(--spacing-sm);
+    color: var(--color-premium-black);
+}
+
+.tip-card p {
+    color: var(--color-text-secondary);
+    line-height: 1.6;
+}
+
+/* Troubleshooting */
+.troubleshoot-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: var(--spacing-lg);
+}
+
+.troubleshoot-card {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: var(--border-radius);
+    padding: var(--spacing-lg);
+}
+
+.troubleshoot-card h3 {
+    color: var(--color-primary-bg);
+    margin-bottom: var(--spacing-md);
+}
+
+.troubleshoot-card ul {
+    list-style: none;
+}
+
+.troubleshoot-card li {
+    color: #e0e0e0;
+    padding: var(--spacing-xs) 0;
+    padding-left: 20px;
+    position: relative;
+}
+
+.troubleshoot-card li:before {
+    content: "→";
+    position: absolute;
+    left: 0;
+    color: var(--color-accent);
+}
+
+.troubleshoot-card kbd {
+    background: var(--color-primary-bg);
+    color: var(--color-premium-black);
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-size: 0.85rem;
+}
+
+/* Active nav link */
+.nav-links a.active {
+    background: var(--color-secondary-bg);
+    color: var(--color-premium-black);
+    font-weight: 600;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .tutorial-hero h1 {
+        font-size: 2rem;
+    }
+    
+    .modes-grid,
+    .tips-grid,
+    .troubleshoot-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .shortcuts-table {
+        overflow-x: auto;
+    }
+    
+    .shortcuts-table table {
+        min-width: 500px;
+    }
+    
+    .keybind-display {
+        flex-wrap: wrap;
+        justify-content: center;
+        text-align: center;
+    }
+}

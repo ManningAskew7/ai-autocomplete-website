@@ -1,0 +1,73 @@
+CHROME WEB STORE IMAGE REQUIREMENTS
+====================================
+Last Updated: January 2025
+
+REQUIRED IMAGES (Must have these to submit)
+--------------------------------------------
+
+SCREENSHOTS (5 required minimum, up to 5 total)
+- Dimensions: 1280x800px or 640x400px
+- Format: PNG or JPEG
+- Note: Chrome will accept either size but 1280x800 is recommended
+
+1. [ ] Screenshot 1: Autocomplete in action (1280x800px)
+2. [ ] Screenshot 2: Extension popup/settings (1280x800px)
+3. [ ] Screenshot 3: Multiple AI models dropdown (1280x800px)
+4. [ ] Screenshot 4: Privacy/keybinds settings (1280x800px)
+5. [ ] Screenshot 5: Rewrite feature or suggestions (1280x800px)
+
+PROMOTIONAL TILE (At least one required)
+- Small Promo Tile: 440x280px (REQUIRED)
+- Format: PNG or JPEG
+- Purpose: Displayed in Chrome Web Store search results
+
+[ ] Small Promo Tile (440x280px) - REQUIRED
+
+
+OPTIONAL IMAGES (Enhance store listing)
+----------------------------------------
+
+ADDITIONAL PROMOTIONAL TILES
+[ ] Large Promo Tile: 920x680px
+    - Displayed on extension detail page
+    
+[ ] Marquee Promo Tile: 1400x560px  
+    - Used for featured extensions
+
+STORE ICON
+[ ] Store Icon: 128x128px
+    - Note: Usually same as extension icon
+    - Already have: icon-128.png in project
+
+
+TIPS FOR CHROME WEB STORE
+--------------------------
+- Exact dimensions ARE required (Chrome will reject wrong sizes)
+- Maximum file size: 1MB per image
+- No alpha transparency for JPEG
+- PNG recommended for better quality
+- Screenshots appear in order uploaded
+- First screenshot is most important (shows in search)
+
+
+SUGGESTED CONTENT FOR EACH IMAGE
+---------------------------------
+
+Screenshot 1: Show autocomplete ghost text on real website
+Screenshot 2: Show clean popup UI with 300+ models
+Screenshot 3: Show numbered suggestions (1-5) with Tab navigation
+Screenshot 4: Show customizable keybinds or privacy settings
+Screenshot 5: Show rewrite feature with multiple options
+
+Small Promo: AIAC logo + "300+ AI Models" + "Privacy-First"
+Large Promo: Extended version with more features listed
+Marquee: Wide banner showcasing all key features
+
+
+QUICK CREATION TIPS
+-------------------
+1. Set browser window to exact size using DevTools
+2. Use Windows Snipping Tool for precise capture
+3. Add text overlays in Paint.NET or Canva
+4. Keep consistent black/white/grey theme
+5. Ensure text is readable at thumbnail size
